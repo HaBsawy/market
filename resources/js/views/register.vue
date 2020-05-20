@@ -1,6 +1,6 @@
 <template>
     <div class="auth">
-        <form>
+        <form @submit.prevent="register">
             <h2>HaBsawy</h2>
             <h3>SIGN UP</h3>
             <div class="form-group">
@@ -54,6 +54,7 @@
 </template>
 
 <script>
+    import axios from 'axios';
     export default {
         name: "Register",
         data() {
@@ -63,6 +64,19 @@
                 password: "",
                 confirmPassword: ""
             };
+        },
+        methods: {
+            register() {
+                axios.post("http://127.0.0.1:8000/api/register", {
+                    "username": this.username,
+                    "email": this.email,
+                    "password": this.password,
+                    "password_confirmation": this.confirmPassword
+                }).then(response => {
+                    localStorage.setItem('token', response.data.access_token);
+                    console.log(response.data);
+                })
+            }
         }
     }
 </script>

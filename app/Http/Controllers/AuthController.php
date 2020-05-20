@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
+use App\User;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -14,7 +14,23 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+    }
+
+    public function register(Request $request)
+    {
+        $user = new User();
+        $user->name = $request->username;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->role = 'customer';
+
+        if ($user->save()) {
+            $token = auth()->attempt(['email' => $request->email, 'password' => $request->password]);
+            return $this->respondWithToken($token);
+        }
+
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     /**
@@ -40,7 +56,11 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return response()->json([
+            'username' => auth()->user()->name,
+            'email' => auth()->user()->email,
+            'role' => auth()->user()->role,
+        ]);
     }
 
     /**
@@ -77,7 +97,12 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => [
+                'username' => auth()->user()->name,
+                'email' => auth()->user()->email,
+                'role' => auth()->user()->role,
+            ]
         ]);
     }
 }

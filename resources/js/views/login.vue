@@ -1,6 +1,6 @@
 <template>
     <div class="auth">
-        <form>
+        <form @submit.prevent="login">
             <h2>HaBsawy</h2>
             <h3>SIGN IN</h3>
             <div class="form-group">
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+    import axios from "axios";
+
     export default {
         name: "Login",
         data() {
@@ -64,6 +66,15 @@
         methods: {
             rememberMe() {
                 this.remember = !this.remember;
+            },
+            login() {
+                axios.post("http://127.0.0.1:8000/api/login", {
+                    "email": this.email,
+                    "password": this.password
+                }).then(response => {
+                    localStorage.setItem('token', response.data.access_token);
+                    console.log(response.data);
+                })
             }
         }
     }

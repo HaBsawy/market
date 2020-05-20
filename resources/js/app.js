@@ -12,7 +12,7 @@ Vue.config.debug = true;
 Vue.config.devtools = true;
 
 import router from "./router";
-import Login from "./views/login";
+import axios from "axios";
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -23,8 +23,19 @@ import Login from "./views/login";
 const app = new Vue({
     router,
     el: '#app',
-    components: {
-        Login
+    data() {
+        return {
+            login: localStorage.getItem('token')
+        };
+    },
+    methods: {
+        logout() {
+            axios.post("http://127.0.0.1:8000/api/logout?token=" + localStorage.getItem('token'))
+                .then(response => {
+                    console.log(response.data);
+                    localStorage.removeItem("token");
+                });
+        }
     }
 });
 
