@@ -12,7 +12,7 @@ Vue.config.debug = true;
 Vue.config.devtools = true;
 
 import router from "./router";
-import Login from "./components/login";
+import Login from "./views/login";
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

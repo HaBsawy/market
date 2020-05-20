@@ -7,9 +7,18 @@
     <title>Market</title>
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
 
+    <link rel="stylesheet" href="{{ asset("css/all.min.css") }}">
     <link rel="stylesheet" href="{{ asset("css/app.css") }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Josefin Sans', sans-serif;
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
