@@ -12,6 +12,7 @@ Vue.config.debug = true;
 Vue.config.devtools = true;
 
 import router from "./router";
+import store from "./store";
 import axios from "axios";
 
 /**
@@ -22,18 +23,20 @@ import axios from "axios";
 
 const app = new Vue({
     router,
+    store,
     el: '#app',
-    data() {
-        return {
-            login: localStorage.getItem('token')
-        };
+    computed: {
+        auth() {
+            return store.getters.auth
+        }
     },
     methods: {
         logout() {
-            axios.post("http://127.0.0.1:8000/api/logout?token=" + localStorage.getItem('token'))
+            axios.post("http://192.168.1.103:8000/api/logout?token=" + localStorage.getItem('token'))
                 .then(response => {
                     console.log(response.data);
                     localStorage.removeItem("token");
+                    store.commit('logout');
                 });
         }
     }

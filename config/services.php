@@ -14,6 +14,18 @@ return [
     |
     */
 
+    'facebook' => [
+        'client_id' => '297107224614950',
+        'client_secret' => '316ddefb9c1f32d1641b9c2e8e78aff7',
+        'redirect' => 'http://localhost:8000/api/callback',
+    ],
+
+    'google' => [
+        'client_id' => '473562970450-3f1b8b85u51hilklpeinu16r7iob8jmd.apps.googleusercontent.com',
+        'client_secret' => 'HyUgXIgL8Gb13GVPdzqHL0IK',
+        'redirect' => 'http://localhost:8000/api/login/google/callback',
+    ],
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),

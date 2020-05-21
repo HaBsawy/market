@@ -21,15 +21,26 @@
     </style>
 </head>
 <body>
+    @if($token ?? '')
+        <div id="token" style="display: none">{{$token ?? ''}}</div>
+    @endif
     <div id="app">
         <nav>
-            <router-link to="/login">Login</router-link>
-            <router-link to="/register">Register</router-link>
-            <a v-if="login" href="logout" @click.prevent="logout">Logout</a>
+            <router-link v-if="!auth" to="/login">Login</router-link>
+            <router-link v-if="!auth" to="/register">Register</router-link>
+            <a v-if="auth" href="logout" @click.prevent="logout">Logout</a>
         </nav>
         <router-view></router-view>
     </div>
 
     <script src="{{ asset("js/app.js") }}"></script>
+    <script>
+        let token = document.getElementById('token').innerText;
+        if (token) {
+            console.log('login');
+            localStorage.setItem('token', token);
+            window.location.href = "http://localhost:8000";
+        }
+    </script>
 </body>
 </html>

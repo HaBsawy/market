@@ -3,6 +3,7 @@
         <form @submit.prevent="login">
             <h2>HaBsawy</h2>
             <h3>SIGN IN</h3>
+            <h6 v-if="error.error">Email or Password is incorrect</h6>
             <div class="form-group">
                 <div class="left-icon">
                     <input type="email" class="form-control" v-model="email" placeholder="Email">
@@ -10,6 +11,7 @@
                         <i class="fas fa-envelope-open"></i>
                     </div>
                 </div>
+                <p v-if="error.errors.email" class="text-danger">{{ error.errors.email[0] }}</p>
             </div>
             <div class="form-group">
                 <div class="left-icon">
@@ -18,6 +20,7 @@
                         <i class="fas fa-lock"></i>
                     </div>
                 </div>
+                <p v-if="error.errors.password" class="text-danger">{{ error.errors.password[0] }}</p>
             </div>
             <div class="row">
                 <div class="col-6">
@@ -42,10 +45,14 @@
             <hr>
             <h4>OR</h4>
             <div class="form-group">
-                <button class="btn facebook btn-block"><i class="fab fa-fw fa-facebook-f"></i> Login with facebook</button>
+                <a href="http://192.168.1.103:8000/api/redirect">
+                    <button type="button" class="btn facebook btn-block"><i class="fab fa-fw fa-facebook-f"></i> Login with facebook</button>
+                </a>
             </div>
             <div class="form-group">
-                <button class="btn google btn-block"><i class="fab fa-fw fa-google"></i> Login with Google</button>
+                <a href="http://192.168.1.103:8000/api/login/google">
+                    <button type="button" class="btn google btn-block"><i class="fab fa-fw fa-google"></i> Login with Google</button>
+                </a>
             </div>
         </form>
     </div>
@@ -53,6 +60,7 @@
 
 <script>
     import axios from "axios";
+    import store from "../store";
 
     export default {
         name: "Login",
@@ -60,7 +68,10 @@
             return {
                 email: "",
                 password: "",
-                remember: false
+                remember: false,
+                error: {
+                    errors: {}
+                }
             };
         },
         methods: {
@@ -68,13 +79,25 @@
                 this.remember = !this.remember;
             },
             login() {
-                axios.post("http://127.0.0.1:8000/api/login", {
+                axios.post("http://192.168.1.103:8000/api/login", {
                     "email": this.email,
                     "password": this.password
                 }).then(response => {
                     localStorage.setItem('token', response.data.access_token);
                     console.log(response.data);
-                })
+                    store.commit('login');
+                    this.$router.push("/");
+                }).catch(error => {
+                    this.error = error.response.data;
+                    if(!this.error.errors) {
+                        this.error.errors = {};
+                    }
+                });
+            }
+        },
+        created() {
+            if (localStorage.getItem('token')) {
+                this.$router.push("/");
             }
         }
     }
@@ -113,6 +136,13 @@
             font-size: 16px;
             margin-bottom: 10px;
             font-weight: bold;
+        }
+
+        h6 {
+            background: #e3342f !important;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
         }
 
         hr {
@@ -166,6 +196,14 @@
                 background-color: #dd4b39;
                 border: 1px solid #dd4b39;
                 color: #fff;
+            }
+
+            p.text-danger {
+                margin: 5px 0 0 20px;
+            }
+
+            a {
+                text-decoration: none;
             }
         }
     }

@@ -21,3 +21,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('register', 'AuthController@register')->name('register');
 Route::post('login', 'AuthController@login')->name('login');
 Route::post('logout', 'AuthController@logout')->name('logout');
+
+Route::group(['middleware' => ['web']], function () {
+    Route::get('/redirect', 'SocialAuthFacebookController@redirect');
+    Route::get('/callback', 'SocialAuthFacebookController@callback');
+
+    Route::get('login/google', 'SocialAuthFacebookController@googleRedirect');
+    Route::get('login/google/callback', 'SocialAuthFacebookController@googleCallback');
+});
+
+
+
+Route::get('simple', function () {
+    return '<a href=" ' . url('api/redirect') . ' " class="btn btn-primary">Login with Facebook</a>';
+});

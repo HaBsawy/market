@@ -19,6 +19,12 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        $this->validate($request, [
+            'username' => 'required|min:3',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:5|confirmed',
+        ]);
+
         $user = new User();
         $user->name = $request->username;
         $user->email = $request->email;
@@ -35,11 +41,16 @@ class AuthController extends Controller
 
     /**
      * Get a JWT via given credentials.
-     *
+     * @param Request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
     {
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
