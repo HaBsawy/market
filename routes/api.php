@@ -23,11 +23,11 @@ Route::post('login', 'AuthController@login')->name('login');
 Route::post('logout', 'AuthController@logout')->name('logout');
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get('/redirect', 'SocialAuthFacebookController@redirect');
-    Route::get('/callback', 'SocialAuthFacebookController@callback');
+    Route::get('/redirect', 'SocialAuthController@redirect');
+    Route::get('/callback', 'SocialAuthController@callback');
 
-    Route::get('login/google', 'SocialAuthFacebookController@googleRedirect');
-    Route::get('login/google/callback', 'SocialAuthFacebookController@googleCallback');
+    Route::get('login/google', 'SocialAuthController@googleRedirect');
+    Route::get('login/google/callback', 'SocialAuthController@googleCallback');
 });
 
 

@@ -84,7 +84,7 @@
                     "password": this.password
                 }).then(response => {
                     localStorage.setItem('token', response.data.access_token);
-                    console.log(response.data);
+                    localStorage.setItem('time', response.data.date);
                     store.commit('login');
                     this.$router.push("/");
                 }).catch(error => {

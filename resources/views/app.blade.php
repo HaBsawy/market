@@ -22,23 +22,21 @@
 </head>
 <body>
     @if($token ?? '')
-        <div id="token" style="display: none">{{$token ?? ''}}</div>
+        <div id="token" style="display: none">{{$token ?? '1'}}</div>
+        <div id="time" style="display: none">{{$mod_date ?? '1'}}</div>
     @endif
     <div id="app">
-        <nav>
-            <router-link v-if="!auth" to="/login">Login</router-link>
-            <router-link v-if="!auth" to="/register">Register</router-link>
-            <a v-if="auth" href="logout" @click.prevent="logout">Logout</a>
-        </nav>
         <router-view></router-view>
     </div>
 
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
-        let token = document.getElementById('token').innerText;
-        if (token) {
-            console.log('login');
+
+        if (document.getElementById('token')) {
+            let token = document.getElementById('token').innerText;
+            let time = document.getElementById('time').innerText;
             localStorage.setItem('token', token);
+            localStorage.setItem('time', time);
             window.location.href = "http://localhost:8000";
         }
     </script>

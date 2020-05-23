@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\SocialFacebookAccountService;
 use App\User;
 use Laravel\Socialite\Facades\Socialite;
 
-class SocialAuthFacebookController extends Controller
+class SocialAuthController extends Controller
 {
     public function redirect()
     {
@@ -16,10 +15,13 @@ class SocialAuthFacebookController extends Controller
     public function callback()
     {
         $userSocial = Socialite::driver('facebook')->stateless()->user();
+        $date = date('d-M-Y h:i:s');
+        $mod_date = strtotime($date."+ 3600 seconds");
+        $mod_date = date('d-M-Y h:i:s', $mod_date);
 
         if (User::where('email', $userSocial->email)->first()) {
             $token = auth()->attempt(['email' => $userSocial->email, 'password' => '123123']);
-            return view('app', compact('token'));
+            return view('app', compact('token', 'mod_date'));
         } else {
             $user = new User();
             $user->name = $userSocial->name;
@@ -29,7 +31,7 @@ class SocialAuthFacebookController extends Controller
 
             if ($user->save()) {
                 $token = auth()->attempt(['email' => $userSocial->email, 'password' => '123123']);
-                return view('app', compact('token'));
+                return view('app', compact('token', 'mod_date'));
             }
         }
     }
@@ -42,10 +44,13 @@ class SocialAuthFacebookController extends Controller
     public function googleCallback()
     {
         $userSocial = Socialite::driver('google')->stateless()->user();
+        $date = date('d-M-Y h:i:s');
+        $mod_date = strtotime($date."+ 3600 seconds");
+        $mod_date = date('d-M-Y h:i:s', $mod_date);
 
         if (User::where('email', $userSocial->email)->first()) {
             $token = auth()->attempt(['email' => $userSocial->email, 'password' => '123123']);
-            return view('app', compact('token'));
+            return view('app', compact('token', 'mod_date'));
         } else {
             $user = new User();
             $user->name = $userSocial->name;
@@ -55,7 +60,7 @@ class SocialAuthFacebookController extends Controller
 
             if ($user->save()) {
                 $token = auth()->attempt(['email' => $userSocial->email, 'password' => '123123']);
-                return view('app', compact('token'));
+                return view('app', compact('token', 'mod_date'));
             }
         }
     }
