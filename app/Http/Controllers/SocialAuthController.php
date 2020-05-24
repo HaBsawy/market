@@ -15,25 +15,9 @@ class SocialAuthController extends Controller
     public function callback()
     {
         $userSocial = Socialite::driver('facebook')->stateless()->user();
-        $date = date('d-M-Y h:i:s');
-        $mod_date = strtotime($date."+ 3600 seconds");
-        $mod_date = date('d-M-Y h:i:s', $mod_date);
-
-        if (User::where('email', $userSocial->email)->first()) {
-            $token = auth()->attempt(['email' => $userSocial->email, 'password' => '123123']);
-            return view('app', compact('token', 'mod_date'));
-        } else {
-            $user = new User();
-            $user->name = $userSocial->name;
-            $user->email = $userSocial->email;
-            $user->password = bcrypt('123123');
-            $user->role = 'customer';
-
-            if ($user->save()) {
-                $token = auth()->attempt(['email' => $userSocial->email, 'password' => '123123']);
-                return view('app', compact('token', 'mod_date'));
-            }
-        }
+        $token = $this->loginOrRegister($userSocial);
+        $mod_date = $this->expiredAt(date('d-M-Y H:i:s'));
+        return view('app', compact('token', 'mod_date'));
     }
 
     public function googleRedirect()
@@ -44,38 +28,34 @@ class SocialAuthController extends Controller
     public function googleCallback()
     {
         $userSocial = Socialite::driver('google')->stateless()->user();
-        $date = date('d-M-Y h:i:s');
-        $mod_date = strtotime($date."+ 3600 seconds");
-        $mod_date = date('d-M-Y h:i:s', $mod_date);
+        $token = $this->loginOrRegister($userSocial);
+        $mod_date = $this->expiredAt(date('d-M-Y H:i:s'));
+        return view('app', compact('token', 'mod_date'));
+    }
 
-        if (User::where('email', $userSocial->email)->first()) {
-            $token = auth()->attempt(['email' => $userSocial->email, 'password' => '123123']);
-            return view('app', compact('token', 'mod_date'));
+    private function loginOrRegister($mainUser)
+    {
+        if (User::where('email', $mainUser->email)->first()) {
+            $token = auth()->attempt(['email' => $mainUser->email, 'password' => '123123']);
+            return $token;
         } else {
             $user = new User();
-            $user->name = $userSocial->name;
-            $user->email = $userSocial->email;
+            $user->name = $mainUser->name;
+            $user->email = $mainUser->email;
             $user->password = bcrypt('123123');
             $user->role = 'customer';
 
             if ($user->save()) {
-                $token = auth()->attempt(['email' => $userSocial->email, 'password' => '123123']);
-                return view('app', compact('token', 'mod_date'));
+                $token = auth()->attempt(['email' => $mainUser->email, 'password' => '123123']);
+                return $token;
             }
         }
     }
 
-    protected function respondWithToken($token)
+    private function expiredAt($time)
     {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-            'user' => [
-                'username' => auth()->user()->name,
-                'email' => auth()->user()->email,
-                'role' => auth()->user()->role,
-            ]
-        ]);
+        $mod_date = strtotime($time."+ 3600 seconds");
+        $mod_date = date('d-M-Y H:i:s', $mod_date);
+        return $mod_date;
     }
 }

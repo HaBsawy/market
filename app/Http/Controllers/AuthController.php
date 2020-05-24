@@ -105,14 +105,14 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
-        $date = date('d-M-Y h:i:s');
+        $date = date('d-M-Y H:i:s');
         $mod_date = strtotime($date."+ " . auth()->factory()->getTTL() * 60 . " seconds");
 
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'date' => date('d-M-Y h:i:s', $mod_date),
+            'date' => date('d-M-Y H:i:s', $mod_date),
             'user' => [
                 'username' => auth()->user()->name,
                 'email' => auth()->user()->email,
