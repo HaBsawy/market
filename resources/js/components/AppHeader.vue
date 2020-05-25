@@ -3,7 +3,8 @@
         <div class="top">
             <div class="container">
                 <div class="welcome">
-                    <h6>Welcome to our market</h6>
+                    <h6 v-if="!login">Welcome to our market</h6>
+                    <h6 v-else>Welcome user</h6>
                 </div>
                 <div class="links">
                     <ul>
@@ -83,11 +84,11 @@
             logout() {
                 axios.post("http://192.168.1.103:8000/api/logout?token=" + localStorage.getItem('token'))
                     .then(response => {
-                        console.log(this.login);
                         this.login = null;
                         localStorage.removeItem("token");
                         localStorage.removeItem("time");
                         store.commit('logout');
+                        this.$router.push('/');
                     });
             }
         }

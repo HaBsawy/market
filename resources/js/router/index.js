@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/home";
 import Login from "../views/login";
 import Register from "../views/register";
+import Category from "../views/Category";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes = [
         path: "/register",
         name: "Register",
         component: Register
+    },
+    {
+        path: "/category",
+        name: "Category",
+        component: Category
     }
 ];
 

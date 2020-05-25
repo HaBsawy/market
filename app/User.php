@@ -11,6 +11,10 @@ class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
+    public function categories() {
+        return $this->hasMany(Category::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
