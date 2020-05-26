@@ -21,8 +21,12 @@
     </style>
 </head>
 <body>
-    @if($token ?? '')
-        <div id="token" style="display: none">{{$token ?? '1'}}</div>
+    @if($auth ?? '')
+        <div id="auth" style="display: none"
+             data-username="{{$auth['username']}}"
+             data-email="{{$auth['email']}}"
+             data-role="{{$auth['role']}}"
+        >{{$auth['token'] ?? '1'}}</div>
         <div id="time" style="display: none">{{$mod_date ?? '1'}}</div>
     @endif
     <div id="app">
@@ -31,12 +35,20 @@
 
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
+        let auth = document.getElementById('auth');
+        if (auth) {
+            let time = document.getElementById('time').innerText,
+                token = auth.innerText,
+                username = auth.getAttribute('data-username'),
+                email = auth.getAttribute('data-email'),
+                role = auth.getAttribute('data-role');
 
-        if (document.getElementById('token')) {
-            let token = document.getElementById('token').innerText;
-            let time = document.getElementById('time').innerText;
             localStorage.setItem('token', token);
             localStorage.setItem('time', time);
+            localStorage.setItem('username', username);
+            localStorage.setItem('email', email);
+            localStorage.setItem('role', role);
+
             window.location.href = "http://localhost:8000";
         }
     </script>

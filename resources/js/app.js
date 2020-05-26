@@ -25,14 +25,11 @@ const app = new Vue({
     store,
     el: '#app',
     computed: {
+        login() {
+            return store.getters.login;
+        },
         auth() {
-            return store.getters.auth
-        }
-    },
-    created() {
-        if(new Date(localStorage.getItem('time')) < new Date()) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('time');
+            return store.getters.auth;
         }
     }
 });

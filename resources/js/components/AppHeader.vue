@@ -4,7 +4,7 @@
             <div class="container">
                 <div class="welcome">
                     <h6 v-if="!login">Welcome to our market</h6>
-                    <h6 v-else>Welcome user</h6>
+                    <h6 v-else>Welcome {{ auth.username }}</h6>
                 </div>
                 <div class="links">
                     <ul>
@@ -73,9 +73,16 @@
         name: "AppHeader",
         data() {
             return {
-                login: store.getters.auth,
                 menu: false
             };
+        },
+        computed: {
+            login() {
+                return store.getters.login;
+            },
+            auth() {
+                return store.getters.auth;
+            }
         },
         methods: {
             menuCollapse: function () {
@@ -84,11 +91,8 @@
             logout() {
                 axios.post("http://192.168.1.103:8000/api/logout?token=" + localStorage.getItem('token'))
                     .then(response => {
-                        this.login = null;
-                        localStorage.removeItem("token");
-                        localStorage.removeItem("time");
                         store.commit('logout');
-                        this.$router.push('/');
+                        this.$router.push('/login');
                     });
             }
         }

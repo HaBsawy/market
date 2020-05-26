@@ -10,20 +10,31 @@
 </template>
 
 <script>
-    import AppHeader from "../components/AppHeader";
     import store from "../store";
+    import AppHeader from "../components/AppHeader";
     import AddCategory from "../components/Category/AddCategory";
     import CategoryList from "../components/Category/CategoryList";
+
     export default {
         name: "Category",
-        data() {
-            return {
-                auth: store.getters.auth
-            };
+        computed: {
+            login() {
+                return store.getters.login;
+            },
+            auth() {
+                return store.getters.auth;
+            },
+            expiredAt() {
+                return store.getters.expiredAt;
+            }
         },
         components: {CategoryList, AddCategory, AppHeader},
         created() {
-            if (!this.auth) {
+            if(new Date(this.expiredAt) < new Date()) {
+                store.commit('logout');
+            }
+
+            if (!this.login || this.auth.role !== 'admin') {
                 this.$router.push('/');
             }
         }

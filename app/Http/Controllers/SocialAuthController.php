@@ -15,9 +15,9 @@ class SocialAuthController extends Controller
     public function callback()
     {
         $userSocial = Socialite::driver('facebook')->stateless()->user();
-        $token = $this->loginOrRegister($userSocial);
+        $auth = $this->loginOrRegister($userSocial);
         $mod_date = $this->expiredAt(date('d-M-Y H:i:s'));
-        return view('app', compact('token', 'mod_date'));
+        return view('app', compact('auth', 'mod_date'));
     }
 
     public function googleRedirect()
@@ -28,16 +28,21 @@ class SocialAuthController extends Controller
     public function googleCallback()
     {
         $userSocial = Socialite::driver('google')->stateless()->user();
-        $token = $this->loginOrRegister($userSocial);
+        $auth = $this->loginOrRegister($userSocial);
         $mod_date = $this->expiredAt(date('d-M-Y H:i:s'));
-        return view('app', compact('token', 'mod_date'));
+        return view('app', compact('auth', 'mod_date'));
     }
 
     private function loginOrRegister($mainUser)
     {
         if (User::where('email', $mainUser->email)->first()) {
             $token = auth()->attempt(['email' => $mainUser->email, 'password' => '123123']);
-            return $token;
+            return [
+                'token' => $token,
+                'username' => auth()->user()->name,
+                'email' => auth()->user()->email,
+                'role' => auth()->user()->role,
+            ];
         } else {
             $user = new User();
             $user->name = $mainUser->name;
@@ -47,7 +52,12 @@ class SocialAuthController extends Controller
 
             if ($user->save()) {
                 $token = auth()->attempt(['email' => $mainUser->email, 'password' => '123123']);
-                return $token;
+                return [
+                    'token' => $token,
+                    'username' => auth()->user()->name,
+                    'email' => auth()->user()->email,
+                    'role' => auth()->user()->role,
+                ];
             }
         }
     }

@@ -84,9 +84,7 @@
                     "password": this.password,
                     "password_confirmation": this.confirmPassword
                 }).then(response => {
-                    localStorage.setItem('token', response.data.access_token);
-                    localStorage.setItem('time', response.data.date);
-                    store.commit('login');
+                    store.commit('login', response.data);
                     this.$router.push("/");
                 }).catch(error => {
                     this.error = error.response.data;
@@ -94,7 +92,7 @@
             }
         },
         created() {
-            if (localStorage.getItem('token')) {
+            if (store.getters.login) {
                 this.$router.push("/");
             }
         }

@@ -2,7 +2,7 @@
     <div>
         <app-header></app-header>
         <section class="content container">
-            <app-aside></app-aside>
+            <app-aside v-if="auth.role === 'admin'"></app-aside>
         </section>
     </div>
 </template>
@@ -10,12 +10,29 @@
 <script>
     import AppHeader from "../components/AppHeader";
     import AppAside from "../components/AppAside";
+    import store from "../store";
 
     export default {
         name: "Home",
+        computed: {
+            login() {
+                return store.getters.login;
+            },
+            auth() {
+                return store.getters.auth
+            },
+            expiredAt() {
+                return store.getters.expiredAt;
+            }
+        },
         components: {
             AppAside,
             AppHeader
+        },
+        created() {
+            if(new Date(this.expiredAt) < new Date()) {
+                store.commit('logout');
+            }
         }
     }
 </script>
