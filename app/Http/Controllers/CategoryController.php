@@ -9,7 +9,7 @@ class CategoryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['index']]);
+        $this->middleware('auth:api');
     }
 
     public function index() {
@@ -27,6 +27,12 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
+        if (auth()->user()->role != 'admin') {
+            return response()->json([
+                'message' => 'you have not permission to create category'
+            ], 403);
+        }
+
         $this->validate($request, [
             'name' => 'required|min:3'
         ]);
@@ -43,12 +49,18 @@ class CategoryController extends Controller
                     'user' => $category->user->name,
                     'name' => $category->name
                 ]
-            ]);
+            ], 201);
         }
     }
 
     public function update(Request $request, Category $category)
     {
+        if (auth()->user()->role != 'admin') {
+            return response()->json([
+                'message' => 'you have not permission to update category'
+            ], 403);
+        }
+
         $this->validate($request, [
             'name' => 'required|min:3'
         ]);
@@ -63,16 +75,22 @@ class CategoryController extends Controller
                     'user' => $category->user->name,
                     'name' => $category->name
                 ]
-            ]);
+            ], 202);
         }
     }
 
     public function destroy(Category $category)
     {
+        if (auth()->user()->role != 'admin') {
+            return response()->json([
+                'message' => 'you have not permission to delete category'
+            ], 403);
+        }
+
         if($category->delete()) {
             return response()->json([
                 'message' => 'category is deleted successfully'
-            ]);
+            ], 200);
         }
     }
 }

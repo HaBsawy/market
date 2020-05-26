@@ -11,12 +11,16 @@ export default new Vuex.Store({
             username: localStorage.getItem('username'),
             email: localStorage.getItem('email'),
             role: localStorage.getItem('role'),
-        }
+        },
+        alert: false,
+        alertData: {}
     },
     getters: {
         login: state => state.login,
         auth: state => state.auth,
         expiredAt: state => state.expiredAt,
+        alert: state => state.alert,
+        alertData: state => state.alertData
     },
     mutations: {
         logout(state) {
@@ -46,6 +50,17 @@ export default new Vuex.Store({
             localStorage.setItem('username', data.user.username);
             localStorage.setItem('email', data.user.email);
             localStorage.setItem('role', data.user.role);
+        },
+        openAlert(state, data) {
+            state.alert = true;
+            state.alertData = data;
+            setTimeout(() => {
+                state.alert = false;
+                state.alertData = {};
+            }, 5000);
+        },
+        closeAlert(state) {
+            state.alert = false;
         }
     },
     actions: {},

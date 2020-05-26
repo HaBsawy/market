@@ -63,6 +63,7 @@
 
 <script>
     import axios from 'axios';
+    import store from "../../store";
     export default {
         name: "CategoryList",
         data() {
@@ -155,8 +156,16 @@
                         }
                     }
                     this.editModal = false;
+                    store.commit('openAlert', {
+                        alertType: 'success',
+                        alertMSG: response.data.message
+                    });
                 }).catch(error => {
                     this.selectCategory.errors = error.response.data.errors;
+                    store.commit('openAlert', {
+                        alertType: 'danger',
+                        alertMSG: error.response.data.message
+                    });
                 });
             },
             deleteCategory() {
@@ -169,6 +178,10 @@
                         }
                     }
                     this.deleteModal = false;
+                    store.commit('openAlert', {
+                        alertType: 'success',
+                        alertMSG: response.data.message
+                    });
                 });
             }
         },
@@ -176,7 +189,7 @@
             axios.get("http://192.168.1.103:8000/api/categories?token=" + localStorage.getItem('token'))
                 .then(response => {
                     this.categories = response.data;
-                })
+                });
         }
     }
 </script>

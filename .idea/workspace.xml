@@ -2,17 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="254e78bb-c217-4ce8-a8bc-129386e1e995" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/resources/js/components/Alert/Alert.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SocialAuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SocialAuthController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/AppHeader.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/AppHeader.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/Category/AddCategory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Category/AddCategory.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/Category/CategoryList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Category/CategoryList.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/store/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/views/Category.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/views/Category.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/views/home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/views/home.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/views/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/views/login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/views/register.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/views/register.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/app.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,7 +180,7 @@
       <option name="presentableId" value="Default" />
       <updated>1589918815001</updated>
       <workItem from="1589918823754" duration="48881000" />
-      <workItem from="1590244876172" duration="30208000" />
+      <workItem from="1590244876172" duration="34108000" />
     </task>
     <servers />
   </component>

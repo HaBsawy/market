@@ -22,6 +22,7 @@
 
 <script>
     import axios from "axios";
+    import store from "../../store";
 
     export default {
         name: "AddCategory",
@@ -49,10 +50,18 @@
                         errors: {
                             name: null
                         }
-                    }
+                    };
                     this.createModal = false;
+                    store.commit('openAlert', {
+                        alertType: 'success',
+                        alertMSG: response.data.message
+                    });
                 }).catch(error => {
                     this.newCategory.errors = error.response.data.errors;
+                    store.commit('openAlert', {
+                        alertType: 'danger',
+                        alertMSG: error.response.data.message
+                    });
                 });
             }
         }

@@ -2,6 +2,7 @@
     <section class="category">
         <app-header></app-header>
         <div class="content container">
+            <alert></alert>
             <h2 class="text-center">Categories</h2>
             <add-category></add-category>
             <category-list></category-list>
@@ -14,6 +15,7 @@
     import AppHeader from "../components/AppHeader";
     import AddCategory from "../components/Category/AddCategory";
     import CategoryList from "../components/Category/CategoryList";
+    import Alert from "../components/Alert/Alert";
 
     export default {
         name: "Category",
@@ -28,7 +30,7 @@
                 return store.getters.expiredAt;
             }
         },
-        components: {CategoryList, AddCategory, AppHeader},
+        components: {Alert, CategoryList, AddCategory, AppHeader},
         created() {
             if(new Date(this.expiredAt) < new Date()) {
                 store.commit('logout');
