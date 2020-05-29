@@ -23,6 +23,8 @@ Route::post('login', 'AuthController@login')->name('login');
 Route::post('logout', 'AuthController@logout')->name('logout');
 
 Route::resource('categories', 'CategoryController')->only(['index', 'store', 'update', 'destroy']);
+Route::resource('products', 'ProductController')->only(['index', 'store', 'update', 'destroy']);
+Route::post('products/{product}', 'ProductController@update');
 
 Route::group(['middleware' => ['web']], function () {
     Route::get('/redirect', 'SocialAuthController@redirect');

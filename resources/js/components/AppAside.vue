@@ -9,7 +9,9 @@
                     </router-link>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-laptop fa-fw"></i>Products</a>
+                    <router-link to="/product">
+                        <i class="fas fa-laptop fa-fw"></i>Products
+                    </router-link>
                 </li>
                 <li>
                     <a href="#"><i class="fas fa-users fa-fw"></i>Users</a>

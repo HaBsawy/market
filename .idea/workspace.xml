@@ -2,14 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="254e78bb-c217-4ce8-a8bc-129386e1e995" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/js/components/Alert/Alert.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/ProductController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Product.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/factories/ProductFactory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/migrations/2020_05_27_125731_create_products_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/uploads/1590672246_IMG_20200508_145337.jpg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/uploads/1590698185_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/uploads/1590703486_images.jpeg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/components/Product/AddProduct.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/components/Product/ProductList.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/views/Product.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Category.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Category.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/Category/AddCategory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Category/AddCategory.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/Category/CategoryList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Category/CategoryList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/store/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/views/Category.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/views/Category.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/AppAside.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/AppAside.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +191,7 @@
       <option name="presentableId" value="Default" />
       <updated>1589918815001</updated>
       <workItem from="1589918823754" duration="48881000" />
-      <workItem from="1590244876172" duration="34108000" />
+      <workItem from="1590244876172" duration="64251000" />
     </task>
     <servers />
   </component>
@@ -191,6 +202,10 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="499" y="168" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1590762003818">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="499" y="168" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1536.824@0.0.1536.824" timestamp="1590762003818" />
     <state x="538" y="182" key="NewPhpClassDialog" timestamp="1590010080508">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -216,6 +231,15 @@
           <line>101</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php-line-method">
+          <url>file://$PROJECT_DIR$/app/Http/Controllers/ProductController.php</url>
+          <line>35</line>
+          <properties>
+            <option name="className" value="\App\Http\Controllers\ProductController" />
+            <option name="methodName" value="store" />
+          </properties>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
