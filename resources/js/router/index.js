@@ -5,6 +5,7 @@ import Login from "../views/login";
 import Register from "../views/register";
 import Category from "../views/Category";
 import Product from "../views/Product";
+import User from "../views/User";
 
 Vue.use(VueRouter);
 
@@ -33,6 +34,11 @@ const routes = [
         path: "/product",
         name: "Product",
         component: Product
+    },
+    {
+        path: "/user",
+        name: "User",
+        component: User
     }
 ];
 

@@ -14,7 +14,9 @@
                     </router-link>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-users fa-fw"></i>Users</a>
+                    <router-link to="/user">
+                        <i class="fas fa-users fa-fw"></i>Users
+                    </router-link>
                 </li>
                 <li>
                     <a href="#"><i class="fas fa-shopping-bag fa-fw"></i>Checkouts</a>

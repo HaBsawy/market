@@ -1,21 +1,23 @@
 <template>
-    <section class="category-list">
+    <section class="user-list">
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
                         <th>name</th>
-                        <th>created by</th>
+                        <th>email</th>
+                        <th>role</th>
                         <th>control</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="category in pageCategory" :key="category.name">
-                        <td>{{ category.name }}</td>
-                        <td>{{ category.user }}</td>
+                    <tr v-for="user in pageUser" :key="user.email">
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.role }}</td>
                         <td>
-                            <button @click="toggleEditModal(category)" class="btn btn-outline-danger btn-sm"><i class="fas fa-edit"></i></button>
-                            <button @click="toggleDeleteModal(category)" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                            <button @click="toggleEditModal(user)" class="btn btn-outline-danger btn-sm"><i class="fas fa-edit"></i></button>
+                            <button @click="toggleDeleteModal(user)" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -23,12 +25,16 @@
         </div>
         <div :class="['modal', 'edit-modal', {'active' : editModal}]">
             <div class="body">
-                <form @submit.prevent="editCategory">
-                    <h3>Edit Category</h3>
+                <form @submit.prevent="editUser">
+                    <h3>Edit User</h3>
                     <div class="input-control">
-                        <label>Name</label>
-                        <input type="text" v-model="selectCategory.name" class="form-control" />
-                        <p v-if="errors.name" class="text-danger">{{ errors.name[0] }}</p>
+                        <label>Role</label>
+                        <select class="form-control" v-model="selectUser.role">
+                            <option value="customer">Customer</option>
+                            <option value="employee">Employee</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <p v-if="errors.role" class="text-danger">{{ errors.role[0] }}</p>
                     </div>
                     <div class="button-control">
                         <button type="button" @click="toggleEditModal(null)" class="btn btn-secondary">Cancel</button>
@@ -39,10 +45,10 @@
         </div>
         <div :class="['modal', 'delete-modal', {'active' : deleteModal}]">
             <div class="body">
-                <form @submit.prevent="deleteCategory">
-                    <h3>Delete Category</h3>
+                <form @submit.prevent="deleteUser">
+                    <h3>Delete User</h3>
                     <div class="input-control">
-                        <label>Are you Sure to delete {{ selectCategory.name }} ??</label>
+                        <label>Are you Sure to delete {{ selectUser.name }} ??</label>
                     </div>
                     <div class="button-control">
                         <button type="button" @click="toggleDeleteModal(null)" class="btn btn-secondary">Cancel</button>
@@ -65,11 +71,11 @@
     import axios from 'axios';
     import store from "../../store";
     export default {
-        name: "CategoryList",
+        name: "UserList",
         data() {
             return {
-                categories: [],
-                selectCategory: {},
+                users: [],
+                selectUser: {},
                 errors: {},
                 editModal: false,
                 deleteModal: false,
@@ -79,7 +85,7 @@
         },
         computed: {
             totalPages() {
-                return Math.ceil(this.categories.length/this.perPage);
+                return Math.ceil(this.users.length/this.perPage);
             },
             pages() {
                 let pages = [];
@@ -88,18 +94,18 @@
                 }
                 return pages;
             },
-            pageCategory() {
+            pageUser() {
                 let lowLimit = (this.thisPage - 1) * this.perPage,
                     highLimit = this.thisPage * this.perPage;
 
-                return this.categories.slice(lowLimit, highLimit);
+                return this.users.slice(lowLimit, highLimit);
             }
         },
         mounted() {
-            this.$root.$on('getCategory', () => {
-                axios.get("http://192.168.1.103:8000/api/categories?token=" + localStorage.getItem('token'))
+            this.$root.$on('getUser', () => {
+                axios.get("http://192.168.1.103:8000/api/users?token=" + localStorage.getItem('token'))
                     .then(response => {
-                        this.categories = response.data;
+                        this.users = response.data;
                     });
             });
         },
@@ -113,39 +119,35 @@
             clickN(n) {
                 this.thisPage = n;
             },
-            toggleEditModal(category) {
+            toggleEditModal(user) {
                 this.editModal = !this.editModal;
                 this.errors = {};
-                if(category == null) {
-                    this.selectCategory = {
-                        name: ''
-                    };
+                if(user == null) {
+                    this.selectUser = {};
                 } else {
-                    this.selectCategory = {...category};
+                    this.selectUser = {...user};
                 }
             },
-            toggleDeleteModal(category) {
+            toggleDeleteModal(user) {
                 this.deleteModal = !this.deleteModal;
-                if(category == null) {
-                    this.selectCategory = {
-                        name: ''
-                    };
+                if(user == null) {
+                    this.selectUser = {};
                 } else {
-                    this.selectCategory = {...category};
+                    this.selectUser = {...user};
                 }
             },
-            editCategory() {
-                let url = "http://192.168.1.103:8000/api/categories/" + this.selectCategory.id + "?token=" + localStorage.getItem('token');
-                axios.put(url, this.selectCategory)
+            editUser() {
+                let url = "http://192.168.1.103:8000/api/users/" + this.selectUser.id + "?token=" + localStorage.getItem('token');
+                axios.put(url, this.selectUser)
                 .then(response => {
-                    this.selectCategory = {};
+                    this.selectUser = {};
                     this.errors = {};
                     this.editModal = false;
                     store.commit('openAlert', {
                         alertType: 'success',
                         alertMSG: response.data.message
                     });
-                    this.$root.$emit('getCategory');
+                    this.$root.$emit('getUser');
                 }).catch(error => {
                     this.errors = error.response.data.errors;
                     store.commit('openAlert', {
@@ -154,24 +156,24 @@
                     });
                 });
             },
-            deleteCategory() {
-                axios.delete("http://192.168.1.103:8000/api/categories/" + this.selectCategory.id + "?token=" + localStorage.getItem('token'))
-                    .then(response => {
-                    this.selectCategory = {};
+            deleteUser() {
+                axios.delete("http://192.168.1.103:8000/api/users/" + this.selectUser.id + "?token=" + localStorage.getItem('token'))
+                .then(response => {
+                    this.selectUser = {};
                     this.errors = {};
                     this.deleteModal = false;
                     store.commit('openAlert', {
                         alertType: 'success',
                         alertMSG: response.data.message
                     });
-                    this.$root.$emit('getCategory');
+                    this.$root.$emit('getUser');
                 });
             }
         },
         created() {
-            axios.get("http://192.168.1.103:8000/api/categories?token=" + localStorage.getItem('token'))
+            axios.get("http://192.168.1.103:8000/api/users?token=" + localStorage.getItem('token'))
                 .then(response => {
-                    this.categories = response.data;
+                    this.users = response.data;
                 });
         }
     }

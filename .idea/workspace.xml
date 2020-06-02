@@ -2,19 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="254e78bb-c217-4ce8-a8bc-129386e1e995" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/images/H.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/images/product.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/uploads/1590949059_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/components/User/UserList.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/views/User.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CategoryController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ProductController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ProductController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/Category/AddCategory.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Category/AddCategory.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/AppAside.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/AppAside.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/components/Category/CategoryList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Category/CategoryList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/Product/AddProduct.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Product/AddProduct.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/Product/ProductList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Product/ProductList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/views/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/views/login.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/app.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/router/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -202,7 +199,7 @@
       <updated>1589918815001</updated>
       <workItem from="1589918823754" duration="48881000" />
       <workItem from="1590244876172" duration="64312000" />
-      <workItem from="1590863756603" duration="10752000" />
+      <workItem from="1590863756603" duration="14330000" />
     </task>
     <servers />
   </component>
@@ -255,6 +252,12 @@
           <line>63</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/resources/js/views/User.vue</url>
+          <line>43</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php-line-method">
           <url>file://$PROJECT_DIR$/app/Http/Controllers/ProductController.php</url>

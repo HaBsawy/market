@@ -30,7 +30,7 @@ class ProductController extends Controller
                 'image' => $product->image,
             ];
         }
-        return response()->json($data);
+        return response()->json($data, 200);
     }
 
     public function store(Request $request)
