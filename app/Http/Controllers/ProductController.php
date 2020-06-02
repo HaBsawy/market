@@ -9,7 +9,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware('auth:api')->except('index');
     }
 
     public function index()

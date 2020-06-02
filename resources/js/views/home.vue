@@ -3,6 +3,7 @@
         <app-header></app-header>
         <section class="content container">
             <app-aside v-if="auth.role === 'admin'"></app-aside>
+            <app-products></app-products>
         </section>
     </div>
 </template>
@@ -11,6 +12,7 @@
     import AppHeader from "../components/AppHeader";
     import AppAside from "../components/AppAside";
     import store from "../store";
+    import AppProducts from "../components/AppProducts";
 
     export default {
         name: "Home",
@@ -26,6 +28,7 @@
             }
         },
         components: {
+            AppProducts,
             AppAside,
             AppHeader
         },
