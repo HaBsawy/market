@@ -2137,11 +2137,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       createModal: false,
       newCategory: {
-        name: '',
-        errors: {
-          name: null
-        }
-      }
+        name: ''
+      },
+      errors: {}
     };
   },
   methods: {
@@ -2151,20 +2149,18 @@ __webpack_require__.r(__webpack_exports__);
     addCategory: function addCategory() {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("http://192.168.1.103:8000/api/categories?token=" + localStorage.getItem('token'), {
-        'name': this.newCategory.name
-      }).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("http://192.168.1.103:8000/api/categories?token=" + localStorage.getItem('token'), this.newCategory).then(function (response) {
         _this.newCategory = {
-          name: '',
-          errors: {
-            name: null
-          }
+          name: ''
         };
+        _this.errors = {};
         _this.createModal = false;
         _store__WEBPACK_IMPORTED_MODULE_1__["default"].commit('openAlert', {
           alertType: 'success',
           alertMSG: response.data.message
         });
+
+        _this.$root.$emit('getCategory');
       })["catch"](function (error) {
         _this.newCategory.errors = error.response.data.errors;
         _store__WEBPACK_IMPORTED_MODULE_1__["default"].commit('openAlert', {
@@ -2266,12 +2262,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       categories: [],
-      selectCategory: {
-        name: '',
-        errors: {
-          name: null
-        }
-      },
+      selectCategory: {},
+      errors: {},
       editModal: false,
       deleteModal: false,
       thisPage: 1,
@@ -2297,6 +2289,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.categories.slice(lowLimit, highLimit);
     }
   },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.$root.$on('getCategory', function () {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://192.168.1.103:8000/api/categories?token=" + localStorage.getItem('token')).then(function (response) {
+        _this.categories = response.data;
+      });
+    });
+  },
   methods: {
     clickPrev: function clickPrev() {
       this.thisPage--;
@@ -2309,20 +2310,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     toggleEditModal: function toggleEditModal(category) {
       this.editModal = !this.editModal;
+      this.errors = {};
 
       if (category == null) {
         this.selectCategory = {
-          name: '',
-          errors: {
-            name: ''
-          }
+          name: ''
         };
       } else {
-        this.selectCategory = _objectSpread(_objectSpread({}, category), {}, {
-          errors: {
-            name: ''
-          }
-        });
+        this.selectCategory = _objectSpread({}, category);
       }
     },
     toggleDeleteModal: function toggleDeleteModal(category) {
@@ -2330,38 +2325,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (category == null) {
         this.selectCategory = {
-          name: '',
-          errors: {
-            name: ''
-          }
+          name: ''
         };
       } else {
-        this.selectCategory = _objectSpread(_objectSpread({}, category), {}, {
-          errors: {
-            name: ''
-          }
-        });
+        this.selectCategory = _objectSpread({}, category);
       }
     },
     editCategory: function editCategory() {
-      var _this = this;
+      var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("http://192.168.1.103:8000/api/categories/" + this.selectCategory.id + "?token=" + localStorage.getItem('token'), {
-        name: this.selectCategory.name
-      }).then(function (response) {
-        _this.selectCategory = {
-          name: '',
-          errors: {
-            name: null
-          }
-        };
-        _this.editModal = false;
+      var url = "http://192.168.1.103:8000/api/categories/" + this.selectCategory.id + "?token=" + localStorage.getItem('token');
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(url, this.selectCategory).then(function (response) {
+        _this2.selectCategory = {};
+        _this2.errors = {};
+        _this2.editModal = false;
         _store__WEBPACK_IMPORTED_MODULE_1__["default"].commit('openAlert', {
           alertType: 'success',
           alertMSG: response.data.message
         });
+
+        _this2.$root.$emit('getCategory');
       })["catch"](function (error) {
-        _this.selectCategory.errors = error.response.data.errors;
+        _this2.selectCategory.errors = error.response.data.errors;
         _store__WEBPACK_IMPORTED_MODULE_1__["default"].commit('openAlert', {
           alertType: 'danger',
           alertMSG: error.response.data.message
@@ -2369,28 +2354,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     deleteCategory: function deleteCategory() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("http://192.168.1.103:8000/api/categories/" + this.selectCategory.id + "?token=" + localStorage.getItem('token')).then(function (response) {
-        _this2.selectCategory = {
-          name: '',
-          errors: {
-            name: null
-          }
-        };
-        _this2.deleteModal = false;
+        _this3.selectCategory = {};
+        _this3.errors = {};
+        _this3.deleteModal = false;
         _store__WEBPACK_IMPORTED_MODULE_1__["default"].commit('openAlert', {
           alertType: 'success',
           alertMSG: response.data.message
         });
+
+        _this3.$root.$emit('getCategory');
       });
     }
   },
   created: function created() {
-    var _this3 = this;
+    var _this4 = this;
 
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://192.168.1.103:8000/api/categories?token=" + localStorage.getItem('token')).then(function (response) {
-      _this3.categories = response.data;
+      _this4.categories = response.data;
     });
   }
 });
@@ -2536,6 +2519,8 @@ __webpack_require__.r(__webpack_exports__);
           alertType: 'success',
           alertMSG: response.data.message
         });
+
+        _this.$root.$emit('getProduct');
       })["catch"](function (error) {
         _this.errors = error.response.data.errors;
         console.log(error.response.data);
@@ -2697,6 +2682,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2732,6 +2720,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.products.slice(lowLimit, highLimit);
     }
   },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.$root.$on('getProduct', function () {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://192.168.1.103:8000/api/products?token=" + localStorage.getItem('token')).then(function (response) {
+        _this.products = response.data;
+      });
+    });
+  },
   methods: {
     clickPrev: function clickPrev() {
       this.thisPage--;
@@ -2744,11 +2741,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     toggleEditModal: function toggleEditModal(product) {
       this.editModal = !this.editModal;
+      this.errors = {};
 
       if (product == null) {
-        this.selectProduct = {
-          name: ''
-        };
+        this.selectProduct = {};
       } else {
         this.selectProduct = _objectSpread({}, product);
       }
@@ -2757,9 +2753,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.deleteModal = !this.deleteModal;
 
       if (product == null) {
-        this.selectProduct = {
-          name: ''
-        };
+        this.selectProduct = {};
       } else {
         this.selectProduct = _objectSpread({}, product);
       }
@@ -2768,7 +2762,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.selectProduct.image = e.target.files[0];
     },
     editProduct: function editProduct() {
-      var _this = this;
+      var _this2 = this;
 
       var config = {
         headers: {
@@ -2778,22 +2772,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var formData = new FormData();
 
       for (var selectProductKey in this.selectProduct) {
-        console.log(selectProductKey, this.selectProduct[selectProductKey]);
         formData.append(selectProductKey, this.selectProduct[selectProductKey]);
       }
 
       var url = "http://192.168.1.103:8000/api/products/" + this.selectProduct.id + "?token=" + localStorage.getItem('token');
-      console.log(url);
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, formData, config).then(function (response) {
-        _this.selectProduct = {};
-        _this.errors = {};
-        _this.editModal = false;
+        _this2.selectProduct = {};
+        _this2.errors = {};
+        _this2.editModal = false;
         _store__WEBPACK_IMPORTED_MODULE_1__["default"].commit('openAlert', {
           alertType: 'success',
           alertMSG: response.data.message
         });
+
+        _this2.$root.$emit('getProduct');
       })["catch"](function (error) {
-        _this.errors = error.response.data.errors;
+        _this2.errors = error.response.data.errors;
         _store__WEBPACK_IMPORTED_MODULE_1__["default"].commit('openAlert', {
           alertType: 'danger',
           alertMSG: error.response.data.message
@@ -2801,26 +2795,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     deleteProduct: function deleteProduct() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("http://192.168.1.103:8000/api/products/" + this.selectProduct.id + "?token=" + localStorage.getItem('token')).then(function (response) {
-        _this2.selectProduct = {};
-        _this2.deleteModal = false;
+        _this3.selectProduct = {};
+        _this3.deleteModal = false;
         _store__WEBPACK_IMPORTED_MODULE_1__["default"].commit('openAlert', {
           alertType: 'success',
           alertMSG: response.data.message
         });
+
+        _this3.$root.$emit('getProduct');
       });
     }
   },
   created: function created() {
-    var _this3 = this;
+    var _this4 = this;
 
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://192.168.1.103:8000/api/categories?token=" + localStorage.getItem('token')).then(function (response) {
-      _this3.categories = response.data;
+      _this4.categories = response.data;
     });
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://192.168.1.103:8000/api/products?token=" + localStorage.getItem('token')).then(function (response) {
-      _this3.products = response.data;
+      _this4.products = response.data;
     });
   }
 });
@@ -3098,7 +3094,8 @@ __webpack_require__.r(__webpack_exports__);
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("http://192.168.1.103:8000/api/login", {
         "email": this.email,
-        "password": this.password
+        "password": this.password,
+        "remember": this.remember
       }).then(function (response) {
         _store__WEBPACK_IMPORTED_MODULE_1__["default"].commit('login', response.data);
 
@@ -7774,7 +7771,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".create-modal[data-v-1997fcf9] {\n  background-color: rgba(10, 10, 10, 0.5);\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n}\n.create-modal.active[data-v-1997fcf9] {\n  display: block;\n}\n.create-modal .body[data-v-1997fcf9] {\n  margin: 100px auto;\n  width: 560px;\n  background-color: #fff;\n  padding: 20px;\n  border-radius: 5px;\n  overflow: hidden;\n}\n.create-modal .body form .input-control[data-v-1997fcf9] {\n  margin-bottom: 20px;\n}\n.create-modal .body form .input-control label[data-v-1997fcf9] {\n  display: block;\n  margin: 0;\n}\n.create-modal .body form .input-control input[data-v-1997fcf9] {\n  display: block;\n}\n.create-modal .body form .input-control textarea[data-v-1997fcf9] {\n  display: block;\n  height: 117px;\n}\n.create-modal .body form .input-control p.text-danger[data-v-1997fcf9] {\n  margin-left: 10px;\n}\n.create-modal .body form .button-control[data-v-1997fcf9] {\n  float: right;\n}\n@media (max-width: 575.98px) {\n.create-modal .body[data-v-1997fcf9] {\n    margin: 50px auto;\n    height: calc(100% - 100px);\n    overflow-y: auto;\n    width: 95%;\n}\n.create-modal .body form .input-control[data-v-1997fcf9] {\n    margin-bottom: 10px;\n}\n}", ""]);
+exports.push([module.i, ".create-modal[data-v-1997fcf9] {\n  background-color: rgba(10, 10, 10, 0.5);\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n}\n.create-modal.active[data-v-1997fcf9] {\n  display: block;\n}\n.create-modal .body[data-v-1997fcf9] {\n  margin: 100px auto;\n  width: 560px;\n  max-height: calc(100% - 200px);\n  background-color: #fff;\n  padding: 20px;\n  border-radius: 5px;\n  overflow-y: auto;\n}\n.create-modal .body form .input-control[data-v-1997fcf9] {\n  margin-bottom: 20px;\n}\n.create-modal .body form .input-control label[data-v-1997fcf9] {\n  display: block;\n  margin: 0;\n}\n.create-modal .body form .input-control input[data-v-1997fcf9] {\n  display: block;\n}\n.create-modal .body form .input-control textarea[data-v-1997fcf9] {\n  display: block;\n  height: 117px;\n}\n.create-modal .body form .input-control p.text-danger[data-v-1997fcf9] {\n  margin-left: 10px;\n}\n.create-modal .body form .button-control[data-v-1997fcf9] {\n  float: right;\n}\n@media (max-width: 575.98px) {\n.create-modal .body[data-v-1997fcf9] {\n    margin: 50px auto;\n    height: calc(100% - 100px);\n    overflow-y: auto;\n    width: 95%;\n}\n.create-modal .body form .input-control[data-v-1997fcf9] {\n    margin-bottom: 10px;\n}\n}", ""]);
 
 // exports
 
@@ -7793,7 +7790,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".table[data-v-8678375c] {\n  margin-top: 30px;\n}\n.table td[data-v-8678375c] {\n  min-width: 130px;\n}\n.pagination[data-v-8678375c] {\n  margin-top: 20px;\n}\n.modal[data-v-8678375c] {\n  background-color: rgba(10, 10, 10, 0.5);\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n}\n.modal.active[data-v-8678375c] {\n  display: block;\n}\n.modal .body[data-v-8678375c] {\n  margin: 100px auto;\n  width: 560px;\n  background-color: #fff;\n  padding: 20px;\n  border-radius: 5px;\n  overflow: hidden;\n}\n.modal .body form .input-control[data-v-8678375c] {\n  margin-bottom: 20px;\n}\n.modal .body form .input-control label[data-v-8678375c] {\n  display: block;\n  margin: 0;\n}\n.modal .body form .input-control input[data-v-8678375c] {\n  display: block;\n}\n.modal .body form .input-control textarea[data-v-8678375c] {\n  display: block;\n  height: 117px;\n}\n.modal .body form .input-control p.text-danger[data-v-8678375c] {\n  margin-left: 10px;\n}\n.modal .body form .button-control[data-v-8678375c] {\n  float: right;\n}\n@media (max-width: 575.98px) {\n.modal .body[data-v-8678375c] {\n    margin: 50px auto;\n    height: calc(100% - 100px);\n    overflow-y: auto;\n    width: 95%;\n}\n.modal .body form .input-control[data-v-8678375c] {\n    margin-bottom: 10px;\n}\n}", ""]);
+exports.push([module.i, ".table[data-v-8678375c] {\n  margin-top: 30px;\n}\n.table td[data-v-8678375c] {\n  min-width: 130px;\n}\n.table td img[data-v-8678375c] {\n  width: 50px;\n}\n.pagination[data-v-8678375c] {\n  margin-top: 20px;\n}\n.modal[data-v-8678375c] {\n  background-color: rgba(10, 10, 10, 0.5);\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n}\n.modal.active[data-v-8678375c] {\n  display: block;\n}\n.modal .body[data-v-8678375c] {\n  margin: 100px auto;\n  width: 560px;\n  max-height: calc(100% - 200px);\n  background-color: #fff;\n  padding: 20px;\n  border-radius: 5px;\n  overflow-y: auto;\n}\n.modal .body form .input-control[data-v-8678375c] {\n  margin-bottom: 20px;\n}\n.modal .body form .input-control label[data-v-8678375c] {\n  display: block;\n  margin: 0;\n}\n.modal .body form .input-control input[data-v-8678375c] {\n  display: block;\n}\n.modal .body form .input-control textarea[data-v-8678375c] {\n  display: block;\n  height: 117px;\n}\n.modal .body form .input-control p.text-danger[data-v-8678375c] {\n  margin-left: 10px;\n}\n.modal .body form .button-control[data-v-8678375c] {\n  float: right;\n}\n@media (max-width: 575.98px) {\n.modal .body[data-v-8678375c] {\n    margin: 50px auto;\n    height: calc(100% - 100px);\n    overflow-y: auto;\n    width: 95%;\n}\n.modal .body form .input-control[data-v-8678375c] {\n    margin-bottom: 10px;\n}\n}", ""]);
 
 // exports
 
@@ -40302,9 +40299,9 @@ var render = function() {
                   }
                 }),
                 _vm._v(" "),
-                _vm.newCategory.errors.name
+                _vm.errors.name
                   ? _c("p", { staticClass: "text-danger" }, [
-                      _vm._v(_vm._s(_vm.newCategory.errors.name[0]))
+                      _vm._v(_vm._s(_vm.errors.name[0]))
                     ])
                   : _vm._e()
               ]),
@@ -40440,9 +40437,9 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _vm.selectCategory.errors.name
+              _vm.errors.name
                 ? _c("p", { staticClass: "text-danger" }, [
-                    _vm._v(_vm._s(_vm.selectCategory.errors.name[0]))
+                    _vm._v(_vm._s(_vm.errors.name[0]))
                   ])
                 : _vm._e()
             ]),
@@ -40529,7 +40526,7 @@ var render = function() {
           [
             _c(
               "li",
-              { class: ["page-item", { disabled: _vm.thisPage == 1 }] },
+              { class: ["page-item", { disabled: _vm.thisPage === 1 }] },
               [
                 _c(
                   "a",
@@ -40553,7 +40550,7 @@ var render = function() {
                 "li",
                 {
                   key: page,
-                  class: ["page-item", { active: page == _vm.thisPage }]
+                  class: ["page-item", { active: page === _vm.thisPage }]
                 },
                 [
                   _c(
@@ -40579,7 +40576,7 @@ var render = function() {
               {
                 class: [
                   "page-item",
-                  { disabled: _vm.thisPage == _vm.totalPages }
+                  { disabled: _vm.thisPage === _vm.totalPages }
                 ]
               },
               [
@@ -41014,7 +41011,17 @@ var render = function() {
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(product.description))]),
               _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(product.image))]),
+              _c("td", [
+                product.image
+                  ? _c("img", {
+                      attrs: {
+                        src: "http://localhost:8000/uploads/" + product.image
+                      }
+                    })
+                  : _c("img", {
+                      attrs: { src: "http://localhost:8000/images/product.png" }
+                    })
+              ]),
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(product.user))]),
               _vm._v(" "),
@@ -41721,7 +41728,7 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
-              attrs: { type: "email", placeholder: "Email" },
+              attrs: { type: "text", placeholder: "Email or Username" },
               domProps: { value: _vm.email },
               on: {
                 input: function($event) {

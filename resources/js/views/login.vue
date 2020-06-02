@@ -6,7 +6,7 @@
             <h6 v-if="error.error">Email or Password is incorrect</h6>
             <div class="form-group">
                 <div class="left-icon">
-                    <input type="email" class="form-control" v-model="email" placeholder="Email">
+                    <input type="text" class="form-control" v-model="email" placeholder="Email or Username">
                     <div class="icon">
                         <i class="fas fa-envelope-open"></i>
                     </div>
@@ -81,7 +81,8 @@
             login() {
                 axios.post("http://192.168.1.103:8000/api/login", {
                     "email": this.email,
-                    "password": this.password
+                    "password": this.password,
+                    "remember": this.remember
                 }).then(response => {
                     store.commit('login', response.data);
                     this.$router.push("/");

@@ -28,7 +28,7 @@
                     <div class="input-control">
                         <label>Name</label>
                         <input type="text" v-model="selectCategory.name" class="form-control" />
-                        <p v-if="selectCategory.errors.name" class="text-danger">{{ selectCategory.errors.name[0] }}</p>
+                        <p v-if="errors.name" class="text-danger">{{ errors.name[0] }}</p>
                     </div>
                     <div class="button-control">
                         <button type="button" @click="toggleEditModal(null)" class="btn btn-secondary">Cancel</button>
@@ -52,11 +52,11 @@
             </div>
         </div>
         <ul v-if="totalPages > 1" class="pagination justify-content-end">
-            <li :class="['page-item', {'disabled' : thisPage == 1}]"><a class="page-link" @click.prevent="clickPrev" href="#">Previous</a></li>
-            <li v-for="page in pages" :key="page" :class="['page-item', {'active' : page == thisPage}]">
+            <li :class="['page-item', {'disabled' : thisPage === 1}]"><a class="page-link" @click.prevent="clickPrev" href="#">Previous</a></li>
+            <li v-for="page in pages" :key="page" :class="['page-item', {'active' : page === thisPage}]">
                 <a class="page-link" @click.prevent="clickN(page)" href="#">{{ page }}</a>
             </li>
-            <li :class="['page-item', {'disabled' : thisPage == totalPages}]"><a class="page-link" @click.prevent="clickNext" href="#">Next</a></li>
+            <li :class="['page-item', {'disabled' : thisPage === totalPages}]"><a class="page-link" @click.prevent="clickNext" href="#">Next</a></li>
         </ul>
     </section>
 </template>
@@ -69,12 +69,8 @@
         data() {
             return {
                 categories: [],
-                selectCategory: {
-                    name: '',
-                    errors: {
-                        name: null
-                    }
-                },
+                selectCategory: {},
+                errors: {},
                 editModal: false,
                 deleteModal: false,
                 thisPage: 1,
@@ -99,6 +95,14 @@
                 return this.categories.slice(lowLimit, highLimit);
             }
         },
+        mounted() {
+            this.$root.$on('getCategory', () => {
+                axios.get("http://192.168.1.103:8000/api/categories?token=" + localStorage.getItem('token'))
+                    .then(response => {
+                        this.categories = response.data;
+                    });
+            });
+        },
         methods: {
             clickPrev() {
                 this.thisPage--;
@@ -111,55 +115,37 @@
             },
             toggleEditModal(category) {
                 this.editModal = !this.editModal;
+                this.errors = {};
                 if(category == null) {
                     this.selectCategory = {
-                        name: '',
-                        errors: {
-                            name: ''
-                        }
+                        name: ''
                     };
                 } else {
-                    this.selectCategory = {
-                        ...category,
-                        errors: {
-                            name: ''
-                        }
-                    };
+                    this.selectCategory = {...category};
                 }
             },
             toggleDeleteModal(category) {
                 this.deleteModal = !this.deleteModal;
                 if(category == null) {
                     this.selectCategory = {
-                        name: '',
-                        errors: {
-                            name: ''
-                        }
+                        name: ''
                     };
                 } else {
-                    this.selectCategory = {
-                        ...category,
-                        errors: {
-                            name: ''
-                        }
-                    };
+                    this.selectCategory = {...category};
                 }
             },
             editCategory() {
-                axios.put("http://192.168.1.103:8000/api/categories/" + this.selectCategory.id + "?token=" + localStorage.getItem('token'), {
-                    name: this.selectCategory.name
-                }).then(response => {
-                    this.selectCategory = {
-                        name: '',
-                        errors: {
-                            name: null
-                        }
-                    }
+                let url = "http://192.168.1.103:8000/api/categories/" + this.selectCategory.id + "?token=" + localStorage.getItem('token');
+                axios.put(url, this.selectCategory)
+                .then(response => {
+                    this.selectCategory = {};
+                    this.errors = {};
                     this.editModal = false;
                     store.commit('openAlert', {
                         alertType: 'success',
                         alertMSG: response.data.message
                     });
+                    this.$root.$emit('getCategory');
                 }).catch(error => {
                     this.selectCategory.errors = error.response.data.errors;
                     store.commit('openAlert', {
@@ -171,17 +157,14 @@
             deleteCategory() {
                 axios.delete("http://192.168.1.103:8000/api/categories/" + this.selectCategory.id + "?token=" + localStorage.getItem('token'))
                     .then(response => {
-                    this.selectCategory = {
-                        name: '',
-                        errors: {
-                            name: null
-                        }
-                    }
+                    this.selectCategory = {};
+                    this.errors = {};
                     this.deleteModal = false;
                     store.commit('openAlert', {
                         alertType: 'success',
                         alertMSG: response.data.message
                     });
+                    this.$root.$emit('getCategory');
                 });
             }
         },

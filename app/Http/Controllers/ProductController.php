@@ -52,18 +52,14 @@ class ProductController extends Controller
         ]);
 
         if($request->image !== null) {
-            $errors = [];
+            $this->validate($request, [
+                'image' => 'image|max:1024|mimes:jpeg,jpg,png'
+            ]);
             $image = $request->image;
             $image_name = $image->getClientOriginalName();
             $image_size = round($image->getSize() / 1024);
             $image_ex = $image->getClientOriginalExtension();
             $full_name = time() . '_' . $image_name;
-
-            if (!in_array($image_ex, ['png', 'jpg', 'jpeg'])) {
-                $errors['not_image'][] = $image_name . 'not image';
-            } elseif ($image_size > (1024*4)) {
-                $errors['large_size'][] = $image_name . 'is too big';
-            }
         }
 
         $product = new Product();
@@ -76,13 +72,11 @@ class ProductController extends Controller
         $product->min_allowed_stock = $request->min_allowed_stock;
         $product->description = $request->description;
         if($request->image !== null) {
-            $product->image = empty($errors) ? $full_name : null;
+            $product->image = $full_name;
+            $image->move('uploads', $full_name);
         }
 
         if($product->save()) {
-            if(empty($errors) && $request->image !== null) {
-                $image->move('uploads', $full_name);
-            }
             return response()->json([
                 'message' => 'product is created successfully',
                 'product' => [
@@ -120,18 +114,14 @@ class ProductController extends Controller
         ]);
 
         if($request->image !== 'null') {
-            $errors = [];
+            $this->validate($request, [
+                'image' => 'image|max:1024|mimes:jpeg,jpg,png'
+            ]);
             $image = $request->image;
             $image_name = $image->getClientOriginalName();
             $image_size = round($image->getSize() / 1024);
             $image_ex = $image->getClientOriginalExtension();
             $full_name = time() . '_' . $image_name;
-
-            if (!in_array($image_ex, ['png', 'jpg', 'jpeg'])) {
-                $errors['not_image'][] = $image_name . 'not image';
-            } elseif ($image_size > (1024*4)) {
-                $errors['large_size'][] = $image_name . 'is too big';
-            }
         }
 
         $product->category_id = $request->category_id;
@@ -141,10 +131,10 @@ class ProductController extends Controller
         $product->brand = $request->brand;
         $product->min_allowed_stock = $request->min_allowed_stock;
         $product->description = $request->description;
-        if($request->image !== 'null' && empty($errors)) {
+        if($request->image !== 'null') {
             $oldImage = $product->image;
-            $image->move('uploads', $full_name);
             $product->image = $full_name;
+            $image->move('uploads', $full_name);
             if (is_file(public_path('uploads\\' . $oldImage))) {
                 unlink(public_path('uploads\\' . $oldImage));
             }

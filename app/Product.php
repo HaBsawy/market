@@ -22,6 +22,7 @@ class Product extends Model
 //    public int $min_allowed_stock;
 //    public string $description;
 //    public string $image;
+    private $category_id;
 
     public function user()
     {

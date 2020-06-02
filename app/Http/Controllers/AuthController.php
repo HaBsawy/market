@@ -37,26 +37,21 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'required',
         ]);
 
-        $credentials = request(['email', 'password']);
+        if (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+            $credentials = ['name' => request('email'), 'password' => request('password')];
+        } else {
+            $credentials = ['email' => request('email'), 'password' => request('password')];
+        }
 
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         return $this->respondWithToken($token);
-    }
-
-    public function me()
-    {
-        return response()->json([
-            'username' => auth()->user()->name,
-            'email' => auth()->user()->email,
-            'role' => auth()->user()->role,
-        ]);
     }
 
     public function logout()

@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" href="{{ asset("css/all.min.css") }}">
     <link rel="stylesheet" href="{{ asset("css/app.css") }}">
+    <link rel="icon" href="{{ asset("images/h.jpg") }}">
     <style>
         * {
             margin: 0;

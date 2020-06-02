@@ -124,6 +124,7 @@
                         alertType: 'success',
                         alertMSG: response.data.message
                     });
+                    this.$root.$emit('getProduct');
                 }).catch(error => {
                     this.errors = error.response.data.errors;
                     console.log(error.response.data);
@@ -159,10 +160,11 @@
         .body {
             margin: 100px auto;
             width: 560px;
+            max-height: calc(100% - 200px);
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
-            overflow: hidden;
+            overflow-y: auto;
 
             form {
 

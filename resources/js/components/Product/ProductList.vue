@@ -25,7 +25,10 @@
                         <td>{{ product.brand }}</td>
                         <td>{{ product.min_allowed_stock }}</td>
                         <td>{{ product.description }}</td>
-                        <td>{{ product.image }}</td>
+                        <td>
+                            <img v-if="product.image" :src="`http://localhost:8000/uploads/${ product.image }`">
+                            <img v-else src="http://localhost:8000/images/product.png">
+                        </td>
                         <td>{{ product.user }}</td>
                         <td>
                             <button @click="toggleEditModal(product)" class="btn btn-outline-danger btn-sm"><i class="fas fa-edit"></i></button>
@@ -155,6 +158,14 @@
                 return this.products.slice(lowLimit, highLimit);
             }
         },
+        mounted() {
+            this.$root.$on('getProduct', () => {
+                axios.get("http://192.168.1.103:8000/api/products?token=" + localStorage.getItem('token'))
+                    .then(response => {
+                        this.products = response.data;
+                    });
+            });
+        },
         methods: {
             clickPrev() {
                 this.thisPage--;
@@ -167,26 +178,19 @@
             },
             toggleEditModal(product) {
                 this.editModal = !this.editModal;
+                this.errors = {};
                 if(product == null) {
-                    this.selectProduct = {
-                        name: '',
-                    };
+                    this.selectProduct = {};
                 } else {
-                    this.selectProduct = {
-                        ...product,
-                    };
+                    this.selectProduct = {...product};
                 }
             },
             toggleDeleteModal(product) {
                 this.deleteModal = !this.deleteModal;
                 if(product == null) {
-                    this.selectProduct = {
-                        name: ''
-                    };
+                    this.selectProduct = {};
                 } else {
-                    this.selectProduct = {
-                        ...product
-                    };
+                    this.selectProduct = {...product};
                 }
             },
             uploadImage(e) {
@@ -198,12 +202,9 @@
                 };
                 let formData = new FormData();
                 for (let selectProductKey in this.selectProduct) {
-                    console.log(selectProductKey, this.selectProduct[selectProductKey]);
                     formData.append(selectProductKey, this.selectProduct[selectProductKey]);
                 }
                 let url = "http://192.168.1.103:8000/api/products/" + this.selectProduct.id + "?token=" + localStorage.getItem('token')
-
-                console.log(url);
                 axios.post(url, formData, config)
                     .then(response => {
                     this.selectProduct = {};
@@ -213,6 +214,7 @@
                         alertType: 'success',
                         alertMSG: response.data.message
                     });
+                    this.$root.$emit('getProduct');
                 }).catch(error => {
                     this.errors = error.response.data.errors;
                     store.commit('openAlert', {
@@ -223,13 +225,14 @@
             },
             deleteProduct() {
                 axios.delete("http://192.168.1.103:8000/api/products/" + this.selectProduct.id + "?token=" + localStorage.getItem('token'))
-                    .then(response => {
+                .then(response => {
                     this.selectProduct = {};
                     this.deleteModal = false;
                     store.commit('openAlert', {
                         alertType: 'success',
                         alertMSG: response.data.message
                     });
+                    this.$root.$emit('getProduct');
                 });
             }
         },
@@ -252,7 +255,11 @@
         margin-top: 30px;
 
         td {
-            min-width: 130px
+            min-width: 130px;
+
+            img {
+                width: 50px;
+            }
         }
     }
 
@@ -275,10 +282,11 @@
         .body {
             margin: 100px auto;
             width: 560px;
+            max-height: calc(100% - 200px);
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
-            overflow: hidden;
+            overflow-y: auto;
 
             form {
 

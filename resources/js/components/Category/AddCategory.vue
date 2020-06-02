@@ -8,7 +8,7 @@
                     <div class="input-control">
                         <label>Name</label>
                         <input type="text" v-model="newCategory.name" class="form-control" />
-                        <p v-if="newCategory.errors.name" class="text-danger">{{ newCategory.errors.name[0] }}</p>
+                        <p v-if="errors.name" class="text-danger">{{ errors.name[0] }}</p>
                     </div>
                     <div class="button-control">
                         <button type="button" @click="toggleCreateModal" class="btn btn-secondary">Cancel</button>
@@ -30,11 +30,9 @@
             return {
                 createModal: false,
                 newCategory: {
-                    name: '',
-                    errors: {
-                        name: null
-                    }
-                }
+                    name: ''
+                },
+                errors: {}
             };
         },
         methods: {
@@ -42,20 +40,18 @@
                 this.createModal = !this.createModal;
             },
             addCategory() {
-                axios.post("http://192.168.1.103:8000/api/categories?token=" + localStorage.getItem('token'), {
-                    'name': this.newCategory.name
-                }).then(response => {
+                axios.post("http://192.168.1.103:8000/api/categories?token=" + localStorage.getItem('token'), this.newCategory)
+                .then(response => {
                     this.newCategory = {
-                        name: '',
-                        errors: {
-                            name: null
-                        }
+                        name: ''
                     };
+                    this.errors = {};
                     this.createModal = false;
                     store.commit('openAlert', {
                         alertType: 'success',
                         alertMSG: response.data.message
                     });
+                    this.$root.$emit('getCategory');
                 }).catch(error => {
                     this.newCategory.errors = error.response.data.errors;
                     store.commit('openAlert', {
