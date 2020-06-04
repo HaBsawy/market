@@ -13,14 +13,16 @@ export default new Vuex.Store({
             role: localStorage.getItem('role'),
         },
         alert: false,
-        alertData: {}
+        alertData: {},
+        cart: []
     },
     getters: {
         login: state => state.login,
         auth: state => state.auth,
         expiredAt: state => state.expiredAt,
         alert: state => state.alert,
-        alertData: state => state.alertData
+        alertData: state => state.alertData,
+        cart: state => state.cart
     },
     mutations: {
         logout(state) {
@@ -61,6 +63,9 @@ export default new Vuex.Store({
         },
         closeAlert(state) {
             state.alert = false;
+        },
+        addToCart(state, product) {
+            state.cart.push(product);
         }
     },
     actions: {},

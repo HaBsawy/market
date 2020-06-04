@@ -32,7 +32,7 @@
                 <div class="icons">
                     <div class="cart">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="bg-danger">4</span>
+                        <span v-if="cart" class="bg-danger">{{ cart }}</span>
                     </div>
                     <div @click="menuCollapse" class="bars">
                         <i class="fas fa-bars"></i>
@@ -69,6 +69,7 @@
 <script>
     import store from "../store";
     import axios from "axios";
+
     export default {
         name: "AppHeader",
         data() {
@@ -82,6 +83,9 @@
             },
             auth() {
                 return store.getters.auth;
+            },
+            cart() {
+                return store.getters.cart.length;
             }
         },
         methods: {

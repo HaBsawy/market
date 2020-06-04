@@ -1,6 +1,7 @@
 <template>
     <div>
         <app-header></app-header>
+        <alert></alert>
         <section class="content container">
             <app-aside v-if="auth.role === 'admin'"></app-aside>
             <app-products></app-products>
@@ -13,6 +14,7 @@
     import AppAside from "../components/AppAside";
     import store from "../store";
     import AppProducts from "../components/AppProducts";
+    import Alert from "../components/Alert/Alert";
 
     export default {
         name: "Home",
@@ -28,6 +30,7 @@
             }
         },
         components: {
+            Alert,
             AppProducts,
             AppAside,
             AppHeader

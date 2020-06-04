@@ -6,7 +6,7 @@
                 <h4>{{ product.name }}</h4>
                 <h4>{{ product.price }}$</h4>
                 <h5>{{ product.brand }}</h5>
-                <button class="btn btn-primary btn-sm">Add to cart</button>
+                <button @click="addToCart(product)" class="btn btn-primary btn-sm">Add to cart</button>
             </div>
         </div>
     </div>
@@ -19,6 +19,11 @@
             product: {
                 type: Object,
                 default: () => {}
+            }
+        },
+        methods: {
+            addToCart(product) {
+                this.$root.$emit('addToCart', product);
             }
         }
     }
