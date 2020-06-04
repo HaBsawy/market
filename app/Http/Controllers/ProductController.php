@@ -21,6 +21,7 @@ class ProductController extends Controller
                 'id' => $product->id,
                 'user' => $product->user->name,
                 'category' => $product->category->name,
+                'category_id' => $product->category_id,
                 'name' => $product->name,
                 'price' => $product->price,
                 'stock' => $product->stock,

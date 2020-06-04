@@ -47,7 +47,11 @@
                 createModal: false,
                 number: 1,
                 selectProduct: {},
+                totalProducts: [],
                 products: [],
+                filterCategories: [],
+                filterBrands: [],
+                filterPrices: [0, 10000],
                 thisPage: 1,
                 perPage: 12
             };
@@ -59,6 +63,15 @@
                     ...product,
                     totalPrice: product.price
                 };
+            });
+            this.$root.$on('filterCategory', categories => {
+                this.filterCategories = categories;
+            });
+            this.$root.$on('filterBrand', brands => {
+                this.filterBrands = brands;
+            });
+            this.$root.$on('filterPrice', price => {
+                this.filterPrices = price;
             });
         },
         computed: {
@@ -79,11 +92,17 @@
                 return this.products.slice(lowLimit, highLimit);
             },
             paginationItems() {
-                if (this.thisPage < 3) {
-                    return [1,2,3,4,5];
-                } else {
-                    return [this.thisPage - 2, this.thisPage - 1, this.thisPage, this.thisPage + 1, this.thisPage + 2]
+                let pages = [];
+                for (let i = 1; i <= this.totalPages; i++) {
+                    if(pages.length > 4) {
+                        break;
+                    } else {
+                        if(i - this.thisPage >= -2) {
+                            pages.push(i);
+                        }
+                    }
                 }
+                return pages;
             }
         },
         methods: {
@@ -115,17 +134,41 @@
                     store.commit('addToCart', product);
                     this.closeCreateModal();
                 }
+            },
+            filter() {
+                let categories = this.filterCategories.length === 0 ? ['laptops', 'taps', 'mobiles', 'accessories'] : this.filterCategories,
+                    brands = this.filterBrands.length === 0 ? ['apple', 'samsung', 'oppo', 'xiaomi', 'huawei', 'hp', 'dell'] : this.filterBrands,
+                    filterProducts = [];
+
+                this.totalProducts.forEach(product => {
+                    if(categories.includes(product.category) && brands.includes(product.brand) && product.price >= this.filterPrices[0] && product.price <= this.filterPrices[1]) {
+                        filterProducts.push(product);
+                    }
+                });
+                console.log(filterProducts.length);
+                this.thisPage = 1;
+                this.products = filterProducts;
             }
         },
         created() {
             axios.get("http://192.168.1.103:8000/api/products")
                 .then(response => {
                     this.products = response.data;
+                    this.totalProducts = response.data;
                 });
         },
         watch: {
             number: function() {
                 this.selectProduct.totalPrice = parseFloat(this.selectProduct.price) * parseInt(this.number);
+            },
+            filterCategories: function () {
+                this.filter();
+            },
+            filterBrands: function () {
+                this.filter();
+            },
+            filterPrices: function () {
+                this.filter();
             }
         }
     }
@@ -187,6 +230,18 @@
                     float: right;
                 }
             }
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .products {
+            width: 100%;
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 991.98px) {
+        .products {
+            width: calc(70% - 20px);
         }
     }
 

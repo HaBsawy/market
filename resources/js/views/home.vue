@@ -3,7 +3,7 @@
         <app-header></app-header>
         <alert></alert>
         <section class="content container">
-            <app-aside v-if="auth.role === 'admin'"></app-aside>
+            <app-aside></app-aside>
             <app-products></app-products>
         </section>
     </div>

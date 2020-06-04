@@ -1,6 +1,6 @@
 <template>
     <aside>
-        <div class="admin">
+        <div class="admin" v-if="auth.role === 'admin'">
             <h3>Hello Admin</h3>
             <ul>
                 <li>
@@ -23,13 +23,27 @@
                 </li>
             </ul>
         </div>
+        <product-filter></product-filter>
     </aside>
 </template>
 
 <script>
+    import ProductFilter from "./ProductFilter";
+    import store from "../store";
     export default {
         name: "AppAside",
-
+        components: {ProductFilter},
+        computed: {
+            login() {
+                return store.getters.login;
+            },
+            auth() {
+                return store.getters.auth
+            },
+            expiredAt() {
+                return store.getters.expiredAt;
+            }
+        }
     }
 </script>
 
@@ -48,6 +62,7 @@
             box-shadow: 0 0 10px $color1;
             border-radius: 5px;
             padding: 20px;
+            margin-bottom: 30px;
 
             ul {
                 list-style: none;
@@ -71,15 +86,7 @@
     }
 
     // Extra small devices (portrait phones, less than 576px)
-    @media (max-width: 575.98px) {
-        aside {
-            float: none;
-            width: 100%;
-        }
-    }
-
-    // Small devices (landscape phones, 576px and up)
-    @media (min-width: 576px) and (max-width: 767.98px) {
+    @media (max-width: 767.98px) {
         aside {
             float: none;
             width: 100%;
@@ -92,7 +99,4 @@
             width: 30%;
         }
     }
-
-    // Large devices (desktops, 992px and up)
-    @media (min-width: 992px) and (max-width: 1199.98px) {  }
 </style>

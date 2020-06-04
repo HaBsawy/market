@@ -1,5 +1,5 @@
 <template>
-    <div class="product col-md-4">
+    <div class="product col-lg-4 col-md-6">
         <div class="con">
             <img src="http://192.168.1.103:8000/images/product.png">
             <div class="body">
