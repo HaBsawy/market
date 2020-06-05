@@ -21,6 +21,7 @@ Route::post('logout', 'AuthController@logout')->name('logout');
 
 Route::resource('categories', 'CategoryController')->only(['index', 'store', 'update', 'destroy']);
 Route::resource('products', 'ProductController')->only(['index', 'store', 'update', 'destroy']);
+Route::resource('checkouts', 'CheckoutController')->only(['index', 'store', 'update', 'destroy']);
 Route::resource('users', 'UserController')->only(['index', 'update', 'destroy']);
 Route::post('products/{product}', 'ProductController@update');
 

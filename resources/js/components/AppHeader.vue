@@ -31,8 +31,10 @@
                 </div>
                 <div class="icons">
                     <div class="cart">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span v-if="cart" class="bg-danger">{{ cart }}</span>
+                        <router-link to="/cart">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span v-if="cart" class="bg-danger">{{ cart }}</span>
+                        </router-link>
                     </div>
                     <div @click="menuCollapse" class="bars">
                         <i class="fas fa-bars"></i>
@@ -173,6 +175,10 @@
 
                     &.cart {
                         position:relative;
+
+                        a {
+                            color: $darkColor;
+                        }
 
                         span {
                             display: block;

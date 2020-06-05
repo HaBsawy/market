@@ -65,7 +65,34 @@ export default new Vuex.Store({
             state.alert = false;
         },
         addToCart(state, product) {
-            state.cart.push(product);
+            let found = false;
+            state.cart.forEach((pro, index) => {
+                if (pro.id === product.id) {
+                    found = true;
+                    state.cart[index] = product;
+                }
+            });
+            if(!found) {
+                state.cart.push(product);
+            }
+        },
+        editProductQuantity(state, product) {
+            let i = undefined;
+            state.cart.forEach((pro, index) => {
+                if (pro.id === product.id) {
+                    i = index;
+                }
+            });
+            state.cart[i] = product;
+        },
+        deleteFromCart(state, product) {
+            let i = undefined;
+            state.cart.forEach((pro, index) => {
+                if (pro.id === product.id) {
+                    i = index;
+                }
+            });
+            state.cart.splice(i, 1);
         }
     },
     actions: {},

@@ -10,20 +10,6 @@ class Product extends Model
         'user_id', 'category_id', 'name', 'price', 'stock', 'brand', 'min_allowed_stock', 'description', 'image'
     ];
 
-//    public int $id;
-//    public int $user_id;
-//    public User $user;
-//    public int $category_id;
-//    public Category $category;
-//    public string $name;
-//    public float $price;
-//    public int $stock;
-//    public string $brand;
-//    public int $min_allowed_stock;
-//    public string $description;
-//    public string $image;
-    private $category_id;
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -32,5 +18,15 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function checkouts()
+    {
+        return $this->belongsToMany(Checkout::class, 'checkout_product', 'product_id');
+    }
+
+    public function checkoutProducts()
+    {
+        return $this->hasMany(CheckoutProduct::class);
     }
 }

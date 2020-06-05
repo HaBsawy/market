@@ -6,6 +6,7 @@ import Register from "../views/register";
 import Category from "../views/Category";
 import Product from "../views/Product";
 import User from "../views/User";
+import Cart from "../views/Cart";
 
 Vue.use(VueRouter);
 
@@ -39,6 +40,11 @@ const routes = [
         path: "/user",
         name: "User",
         component: User
+    },
+    {
+        path: "/cart",
+        name: "Cart",
+        component: Cart
     }
 ];
 
