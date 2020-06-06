@@ -83,7 +83,8 @@ export default new Vuex.Store({
                     i = index;
                 }
             });
-            state.cart[i] = product;
+            state.cart.splice(i, 1);
+            state.cart.push(product);
         },
         deleteFromCart(state, product) {
             let i = undefined;
@@ -93,6 +94,9 @@ export default new Vuex.Store({
                 }
             });
             state.cart.splice(i, 1);
+        },
+        clearCart(state) {
+            state.cart = [];
         }
     },
     actions: {},

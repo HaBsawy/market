@@ -23,8 +23,8 @@
                     <td>{{ product.totalPrice }}</td>
                     <td>{{ product.brand }}</td>
                     <td>
-                        <img v-if="product.image" :src="`http://localhost:8000/uploads/${ product.image }`">
-                        <img v-else src="http://localhost:8000/images/product.png">
+                        <img v-if="product.image" :src="`http://192.168.1.103:8000/uploads/${ product.image }`">
+                        <img v-else src="http://192.168.1.103:8000/images/product.png">
                     </td>
                     <td>
                         <button @click="toggleEditModal(product)" class="btn btn-outline-danger btn-sm"><i class="fas fa-edit"></i></button>
@@ -76,14 +76,15 @@
             </div>
         </div>
         <div v-if="productsOfCart.length" class="float-right">
-            <button class="btn btn-secondary">Cancel</button>
-            <button class="btn btn-primary">Confirm the cart</button>
+            <button @click="clearCart" class="btn btn-danger">Clear the cart</button>
+            <button @click="confirmCart" class="btn btn-primary">Confirm the cart</button>
         </div>
     </div>
 </template>
 
 <script>
     import store from "../../store";
+    import axios from "axios";
 
     export default {
         name: "CartList",
@@ -147,6 +148,34 @@
                 this.selectProduct = {};
                 this.number = 1;
                 this.deleteModal = false;
+            },
+            confirmCart() {
+                let formData = new FormData();
+                formData.append('numberOfProducts', this.productsOfCart.length);
+
+                this.productsOfCart.forEach((pro, index) => {
+                    formData.append(`product_id${index}`, pro.id);
+                    formData.append(`product_quantity${index}`, pro.number);
+                    formData.append(`product_totalPrice${index}`, pro.totalPrice);
+                });
+
+                axios.post("http://192.168.1.103:8000/api/checkouts?token=" + localStorage.getItem('token'), formData)
+                    .then(response => {
+                        console.log(response.data);
+                        store.commit('clearCart');
+                        store.commit('openAlert', {
+                            alertType: 'success',
+                            alertMSG: response.data.message
+                        });
+                    }).catch(error => {
+                        store.commit('openAlert', {
+                            alertType: 'danger',
+                            alertMSG: error.response.data.message
+                        });
+                });
+            },
+            clearCart() {
+                store.commit('clearCart');
             }
         },
         watch: {

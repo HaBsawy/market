@@ -2345,6 +2345,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../store */ "./resources/js/store/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2436,6 +2438,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CartList",
   data: function data() {
@@ -2500,6 +2503,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.selectProduct = {};
       this.number = 1;
       this.deleteModal = false;
+    },
+    confirmCart: function confirmCart() {
+      var formData = new FormData();
+      formData.append('numberOfProducts', this.productsOfCart.length);
+      this.productsOfCart.forEach(function (pro, index) {
+        formData.append("product_id".concat(index), pro.id);
+        formData.append("product_quantity".concat(index), pro.number);
+        formData.append("product_totalPrice".concat(index), pro.totalPrice);
+      });
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("http://192.168.1.103:8000/api/checkouts?token=" + localStorage.getItem('token'), formData).then(function (response) {
+        console.log(response.data);
+        _store__WEBPACK_IMPORTED_MODULE_0__["default"].commit('clearCart');
+        _store__WEBPACK_IMPORTED_MODULE_0__["default"].commit('openAlert', {
+          alertType: 'success',
+          alertMSG: response.data.message
+        });
+      })["catch"](function (error) {
+        _store__WEBPACK_IMPORTED_MODULE_0__["default"].commit('openAlert', {
+          alertType: 'danger',
+          alertMSG: error.response.data.message
+        });
+      });
+    },
+    clearCart: function clearCart() {
+      _store__WEBPACK_IMPORTED_MODULE_0__["default"].commit('clearCart');
     }
   },
   watch: {
@@ -42531,11 +42559,14 @@ var render = function() {
                 product.image
                   ? _c("img", {
                       attrs: {
-                        src: "http://localhost:8000/uploads/" + product.image
+                        src:
+                          "http://192.168.1.103:8000/uploads/" + product.image
                       }
                     })
                   : _c("img", {
-                      attrs: { src: "http://localhost:8000/images/product.png" }
+                      attrs: {
+                        src: "http://192.168.1.103:8000/images/product.png"
+                      }
                     })
               ]),
               _vm._v(" "),
@@ -42715,13 +42746,17 @@ var render = function() {
     _vm._v(" "),
     _vm.productsOfCart.length
       ? _c("div", { staticClass: "float-right" }, [
-          _c("button", { staticClass: "btn btn-secondary" }, [
-            _vm._v("Cancel")
-          ]),
+          _c(
+            "button",
+            { staticClass: "btn btn-danger", on: { click: _vm.clearCart } },
+            [_vm._v("Clear the cart")]
+          ),
           _vm._v(" "),
-          _c("button", { staticClass: "btn btn-primary" }, [
-            _vm._v("Confirm the cart")
-          ])
+          _c(
+            "button",
+            { staticClass: "btn btn-primary", on: { click: _vm.confirmCart } },
+            [_vm._v("Confirm the cart")]
+          )
         ])
       : _vm._e()
   ])
@@ -62993,7 +63028,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
           i = index;
         }
       });
-      state.cart[i] = product;
+      state.cart.splice(i, 1);
+      state.cart.push(product);
     },
     deleteFromCart: function deleteFromCart(state, product) {
       var i = undefined;
@@ -63003,6 +63039,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
         }
       });
       state.cart.splice(i, 1);
+    },
+    clearCart: function clearCart(state) {
+      state.cart = [];
     }
   },
   actions: {},
