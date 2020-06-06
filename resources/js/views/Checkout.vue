@@ -1,10 +1,10 @@
 <template>
-    <div class="cart">
+    <div class="checkout">
         <app-header></app-header>
         <alert></alert>
         <section class="content container">
-            <h2 class="text-center">My Cart</h2>
-            <cart-list></cart-list>
+            <h2 class="text-center">Checkouts</h2>
+            <checkout-list></checkout-list>
         </section>
     </div>
 </template>
@@ -12,10 +12,10 @@
 <script>
     import AppHeader from "../components/AppHeader";
     import Alert from "../components/Alert/Alert";
-    import CartList from "../components/Cart/CartList";
     import store from "../store";
+    import CheckoutList from "../components/Checkout/CheckoutList";
     export default {
-        name: "Cart",
+        name: "Checkout",
         computed: {
             login() {
                 return store.getters.login;
@@ -27,14 +27,14 @@
                 return store.getters.expiredAt;
             }
         },
-        components: {CartList, Alert, AppHeader},
+        components: {CheckoutList, Alert, AppHeader},
         created() {
             if(new Date(this.expiredAt) < new Date()) {
                 store.commit('logout');
             }
 
-            if (!this.login) {
-                this.$router.push('/login');
+            if (!this.login || this.auth.role !== 'admin') {
+                this.$router.push('/');
             }
         }
     }

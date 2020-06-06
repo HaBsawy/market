@@ -63,11 +63,55 @@ class CheckoutController extends Controller
 
     public function update(Checkout $checkout, Request $request)
     {
+        if (auth()->user()->role == 'customer') {
+            return response()->json([
+                'message' => 'you have not permission to update checkout'
+            ], 403);
+        }
 
+        $this->validate($request, [
+            'status' => 'required|in:preparing,sending,delivered'
+        ]);
+
+        $checkout->status = $request->status;
+
+        if($checkout->save()) {
+            return response()->json([
+                'message' => 'checkout is updated successfully',
+                'checkout' => [
+                    'id' => $checkout->id,
+                    'user' => $checkout->user->name,
+                    'status' => $checkout->status
+                ]
+            ], 202);
+        }
     }
 
     public function destroy(Checkout $checkout)
     {
+        if (auth()->user()->role == 'customer') {
+            return response()->json([
+                'message' => 'you have not permission to delete checkout'
+            ], 403);
+        }
 
+        $checkoutProducts = $checkout->checkoutProducts;
+        $errors = 0;
+
+        foreach ($checkoutProducts as $checkoutProduct) {
+            $checkoutProduct->product->stock += (integer)$checkoutProduct->quantity;
+            $checkoutProduct->product->save();
+            if(!$checkoutProduct->delete()) {
+                $errors++;
+            }
+        }
+
+        if($errors === 0) {
+            if($checkout->delete()) {
+                return response()->json([
+                    'message' => 'checkout is deleted successfully'
+                ], 200);
+            }
+        }
     }
 }

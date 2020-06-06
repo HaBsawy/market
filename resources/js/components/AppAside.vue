@@ -19,7 +19,9 @@
                     </router-link>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-shopping-bag fa-fw"></i>Checkouts</a>
+                    <router-link to="/checkout">
+                        <i class="fas fa-shopping-bag fa-fw"></i>Checkouts
+                    </router-link>
                 </li>
             </ul>
         </div>
