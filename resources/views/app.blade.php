@@ -50,7 +50,7 @@
             localStorage.setItem('email', email);
             localStorage.setItem('role', role);
 
-            window.location.href = "http://localhost:8000";
+            window.location.href = "http://localhost:8080";
         }
     </script>
 </body>

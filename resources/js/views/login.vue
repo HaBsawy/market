@@ -104,7 +104,6 @@
 
 <style scoped lang="scss">
     body {
-        /*background: url('../images/authentication-bg.png');*/
         width: 100%;
         height: 100%;
     }

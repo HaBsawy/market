@@ -7,30 +7,18 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
 {
-    public function redirect()
+    public function redirect($driver)
     {
-        return Socialite::driver('facebook')->redirect();
+        return Socialite::driver($driver)->redirect();
     }
 
-    public function callback()
+    public function callback($driver)
     {
-        $userSocial = Socialite::driver('facebook')->stateless()->user();
+        $userSocial = Socialite::driver($driver)->stateless()->user();
         $auth = $this->loginOrRegister($userSocial);
         $mod_date = $this->expiredAt(date('d-M-Y H:i:s'));
-        return view('app', compact('auth', 'mod_date'));
-    }
-
-    public function googleRedirect()
-    {
-        return Socialite::driver('google')->redirect();
-    }
-
-    public function googleCallback()
-    {
-        $userSocial = Socialite::driver('google')->stateless()->user();
-        $auth = $this->loginOrRegister($userSocial);
-        $mod_date = $this->expiredAt(date('d-M-Y H:i:s'));
-        return view('app', compact('auth', 'mod_date'));
+        $subquery = 'token=' . $auth['token'] . '&username=' . $auth['username'] . '&email=' . $auth['email'] . '&role=' . $auth['role'] . '&date=' . $mod_date;
+        return redirect()->to('https://market94.netlify.app/?' . $subquery);
     }
 
     private function loginOrRegister($mainUser)

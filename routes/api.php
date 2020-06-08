@@ -26,9 +26,9 @@ Route::resource('users', 'UserController')->only(['index', 'update', 'destroy'])
 Route::post('products/{product}', 'ProductController@update');
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get('/redirect', 'SocialAuthController@redirect');
-    Route::get('/callback', 'SocialAuthController@callback');
+//    Route::get('/redirect', 'SocialAuthController@redirect');
+//    Route::get('/callback', 'SocialAuthController@callback');
 
-    Route::get('login/google', 'SocialAuthController@googleRedirect');
-    Route::get('login/google/callback', 'SocialAuthController@googleCallback');
+    Route::get('login/{driver}', 'SocialAuthController@Redirect');
+    Route::get('login/{driver}/callback', 'SocialAuthController@Callback');
 });
