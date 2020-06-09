@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Checkout;
 use App\CheckoutProduct;
+use App\Events\CheckoutCreationEvent;
 use App\Product;
 use Illuminate\Http\Request;
 
@@ -53,6 +54,8 @@ class CheckoutController extends Controller
             }
             $checkout->totalPrice = $totalPrice;
             $checkout->save();
+
+            event(new CheckoutCreationEvent($checkout));
 
             return response()->json([
                 'message' => 'checkout is sent',
