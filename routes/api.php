@@ -23,6 +23,7 @@ Route::resource('categories', 'CategoryController')->only(['index', 'store', 'up
 Route::resource('products', 'ProductController')->only(['index', 'store', 'update', 'destroy']);
 Route::resource('checkouts', 'CheckoutController')->only(['index', 'store', 'update', 'destroy']);
 Route::resource('users', 'UserController')->only(['index', 'update', 'destroy']);
+Route::resource('contacts', 'ContactController')->only(['index', 'store', 'destroy']);
 Route::post('products/{product}', 'ProductController@update');
 
 Route::group(['middleware' => ['web']], function () {

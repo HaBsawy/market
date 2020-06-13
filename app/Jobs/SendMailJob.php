@@ -35,7 +35,7 @@ class SendMailJob implements ShouldQueue
      */
     public function handle()
     {
-        $users = User::select('email')->where('role', 'admin')->get()->limit(5)->toarray();
+        $users = User::select('email')->where('role', 'admin')->limit(5)->get()->toarray();
         foreach ($users as $user) {
             Mail::to($user['email'])->send(new CheckoutCreationMail($this->checkout));
         }
