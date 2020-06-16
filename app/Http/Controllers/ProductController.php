@@ -9,7 +9,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api')->except('index');
+        $this->middleware('auth:api')->except('index', 'show');
     }
 
     public function index()
@@ -94,6 +94,31 @@ class ProductController extends Controller
                 ]
             ], 201);
         }
+    }
+
+    public function show($id)
+    {
+        $product = Product::find($id);
+
+        if ($product === null) {
+            return response()->json([
+                'message' => 'Product not found'
+            ], 404);
+        }
+        return response()->json([
+            'product' => [
+                'id' => $product->id,
+                'user' => $product->user->name,
+                'category' => $product->category->name,
+                'name' => $product->name,
+                'price' => $product->price,
+                'stock' => $product->stock,
+                'brand' => $product->brand,
+                'min_allowed_stock' => $product->min_allowed_stock,
+                'description' => $product->description,
+                'image' => $product->image,
+            ]
+        ], 200);
     }
 
     public function update(Request $request, Product $product)

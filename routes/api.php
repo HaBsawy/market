@@ -20,7 +20,7 @@ Route::post('login/refresh', 'AuthController@refresh')->name('refresh');
 Route::post('logout', 'AuthController@logout')->name('logout');
 
 Route::resource('categories', 'CategoryController')->only(['index', 'store', 'update', 'destroy']);
-Route::resource('products', 'ProductController')->only(['index', 'store', 'update', 'destroy']);
+Route::resource('products', 'ProductController')->only(['index', 'store', 'show', 'update', 'destroy']);
 Route::resource('checkouts', 'CheckoutController')->only(['index', 'store', 'update', 'destroy']);
 Route::resource('users', 'UserController')->only(['index', 'update', 'destroy']);
 Route::resource('contacts', 'ContactController')->only(['index', 'store', 'destroy']);
